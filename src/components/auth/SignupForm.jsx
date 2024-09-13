@@ -1,31 +1,32 @@
-// import React from "react";
-import { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import FormInput from '../FormInput'
 import Button from '../reusable/Button'
-// import axios from "axios"
 import { useNavigate } from 'react-router-dom'
-// import { AuthContext} from "../../context/AuthContext";
 import UserAuthentication from '../../services/AuthServices'
-import FetchClient from '../../ServiceClients/FetchClient'
 import axios from 'axios'
-import { login } from '../../store/authSlice'
+import { AuthContext } from '../../context/AuthContext'
 
 function SignupForm() {
-  // const {login} = useContext(AuthContext)
   const [formData, setFormData] = useState({})
+  const [role, setRole] = useState('') // State to handle the role
+  const [headline, setHeadline] = useState('') // State to handle the headline
   const navigate = useNavigate()
+  const { login } = useContext(AuthContext)
 
   function handleChange(e) {
     const { name, value } = e.target
     console.log(name, value)
-    setFormData((prevState) => {
-      return {
-        ...prevState,
-        [name]: value,
-      }
-    })
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+
+    // Set the role state
+    if (name === 'role') {
+      setRole(value)
+    }
   }
 
   async function handleSubmit(e) {
@@ -35,6 +36,11 @@ function SignupForm() {
     const userAuthentication = new UserAuthentication(axios) // Assuming FetchClient is Axios
 
     try {
+      // Include the headline in formData if the role is 'businessOwner'
+      if (role === 'businessOwner') {
+        formData.headline = headline
+      }
+
       // Call registerUser and get response
       const response = await userAuthentication.registerUser(formData)
 
@@ -42,6 +48,7 @@ function SignupForm() {
       // Since 204 status code does not return data, handle it accordingly
       if (response.status === 201) {
         login(response.token, response.user)
+        console.log(response)
         toast.success(response.msg)
         navigate('/listing')
       } else {
@@ -49,13 +56,11 @@ function SignupForm() {
         toast.success(response.data.msg || 'Operation successful.')
       }
     } catch (err) {
-      console.error(err)
-      // Access error response if available
-      const errorMessage =
-        err.response?.data?.msg || 'There was a problem when signing up.'
-      toast.error(errorMessage)
+      console.error(err.response.data.msg)
+      toast.error(err.response.data.msg)
     }
   }
+
   return (
     <div>
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -79,7 +84,7 @@ function SignupForm() {
           inputId='role'
           inputName='role'
           ariaLabelName='Role'
-          inputValue={formData.role}
+          inputValue={role}
           onChange={(e) => handleChange(e)}
           isRequired={true}
           className='w-full p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-none focus:shadow mb-5'
@@ -89,6 +94,22 @@ function SignupForm() {
             { value: 'serviceSeeker', label: 'Service Seeker' },
           ]}
         />
+
+        {/* Conditionally render the headline input based on the role */}
+        {role === 'businessOwner' && (
+          <FormInput
+            inputLabel='Headline'
+            labelFor='headline'
+            inputType='text'
+            inputId='headline'
+            inputName='headline'
+            placeholderText='Enter your headline'
+            ariaLabelName='Headline'
+            inputValue={headline}
+            onChange={(e) => setHeadline(e.target.value)}
+            className='w-full p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-none focus:shadow mb-5'
+          />
+        )}
 
         <FormInput
           inputLabel='Email Address'
@@ -117,8 +138,6 @@ function SignupForm() {
           showPasswordRequirement={true}
           className='w-full p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-none focus:shadow'
         />
-        {/* <PhoneNumber />
-        <HiddenInput /> */}
         <Button className='w-full md:text-base text-white font-medium px-6 py-4 rounded-md mt-5 bg-[#720D96]'>
           Sign up
         </Button>

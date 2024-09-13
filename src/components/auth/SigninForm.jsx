@@ -40,17 +40,22 @@ function SigninForm() {
     const userAuthentication = new UserAuthentication(FetchClient)
     try {
       const res = await userAuthentication.authenticateUser(formData)
-      // const data = await res.json()
       console.log(res, 'response')
+
       if (res.status === 200) {
         navigate(from)
         login(res.token, res.user)
-
         toast.success('You have successfully signed in.')
       }
     } catch (err) {
       console.error(err)
-      toast.error('There was a problem when logging in.')
+
+      if (err.response && err.response.data && err.response.data.msg) {
+        toast.error(err.response.data.msg)
+      } else {
+        // This block catches cases where there's no response from the server
+        toast.error('Server is down or unreachable')
+      }
     }
   }
 

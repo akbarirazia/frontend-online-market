@@ -8,8 +8,8 @@ export default function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
-    // Initialize state from localStorage
-    const storedData = JSON.parse(localStorage.getItem('user_data'))
+    // Initialize state from sessionStorage
+    const storedData = JSON.parse(sessionStorage.getItem('user_data'))
 
     if (storedData) {
       const { userToken, user } = storedData
@@ -17,7 +17,7 @@ export default function AuthProvider({ children }) {
       setUserData(user)
       setIsAuthenticated(true)
     } else {
-      // Clear state if no data in localStorage
+      // Clear state if no data in sessionStorage
       setToken(null)
       setUserData(null)
       setIsAuthenticated(false)
@@ -25,7 +25,8 @@ export default function AuthProvider({ children }) {
   }, []) // Empty dependency array ensures this runs only once
 
   function login(newToken, newData) {
-    localStorage.setItem(
+    // Store data in sessionStorage
+    sessionStorage.setItem(
       'user_data',
       JSON.stringify({ userToken: newToken, user: newData })
     )
@@ -36,15 +37,30 @@ export default function AuthProvider({ children }) {
   }
 
   function logout() {
-    localStorage.removeItem('user_data')
+    // Remove data from sessionStorage
+    sessionStorage.removeItem('user_data')
     setToken(null)
     setUserData(null)
     setIsAuthenticated(false)
   }
 
+  function updateUser(newData) {
+    // Update sessionStorage
+    const storedData = JSON.parse(sessionStorage.getItem('user_data'))
+    if (storedData) {
+      sessionStorage.setItem(
+        'user_data',
+        JSON.stringify({ userToken: storedData.userToken, user: newData })
+      )
+    }
+
+    // Update local state
+    setUserData(newData)
+  }
+
   return (
     <AuthContext.Provider
-      value={{ token, isAuthenticated, login, logout, userData }}
+      value={{ token, isAuthenticated, login, logout, updateUser, userData }}
     >
       {children}
     </AuthContext.Provider>
