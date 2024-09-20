@@ -171,10 +171,18 @@ export const ListingsProvider = ({ children }) => {
       setFilteredProfiles(filteredUsers);
     }
   };
+  const listings = [];
 
   return (
     <ListingsContext.Provider
-      value={{ profiles, filteredProfiles, isLoading, error, showCategory }}
+      value={{
+        profiles,
+        filteredProfiles,
+        isLoading,
+        error,
+        showCategory,
+        listings,
+      }}
     >
       {children}
     </ListingsContext.Provider>

@@ -1,107 +1,95 @@
-import React, { createContext } from "react";
-import PropTypes from "prop-types";
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { fetchNotifications } from '../services/GetNotification'; // Assuming you have an API file for fetching notifications
+import { AuthContext } from './AuthContext';
 
 export const ModalContext = createContext();
 
 function ModalProvider({ children }) {
-    const [showLocationModal, setShowLocationModal] = React.useState(false);
-    const [showNotifications, setShowNotifications] = React.useState(false);
-    const [showSellerModal, setShowSellerModal] = React.useState(false);
-    const [showMessageModal, setShowMessageModal] = React.useState(false);
-    const [showDeleteListingsModal, setShowDeleteListingsModal] = React.useState(false);
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showSellerModal, setShowSellerModal] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showDeleteListingsModal, setShowDeleteListingsModal] = useState(false);
 
-    function handleLocationToggle() {
-        if (!showLocationModal) {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.add("overflow-y-hidden");
-            setShowLocationModal(true);
-        } else {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.remove("overflow-y-hidden");
-            setShowLocationModal(false);
-        }
+  const [notifications, setNotifications] = useState([]);
+  const { userData } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
+  console.log('this is running');
+
+  useEffect(() => {
+    const loadNotifications = async () => {
+      if (!userData?.id) return;
+
+      try {
+        const data = await fetchNotifications(userData.id);
+        setNotifications(data);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadNotifications(); // Fetch on component mount
+  }, [userData]);
+
+  function handleLocationToggle() {
+    toggleModal(showLocationModal, setShowLocationModal);
+  }
+
+  function handleNotificationToggle() {
+    toggleModal(showNotifications, setShowNotifications);
+  }
+
+  function handleSellerToggle() {
+    toggleModal(showSellerModal, setShowSellerModal);
+  }
+
+  function handleMessageToggle() {
+    toggleModal(showMessageModal, setShowMessageModal);
+  }
+
+  function handleDeleteListingsToggle() {
+    toggleModal(showDeleteListingsModal, setShowDeleteListingsModal);
+  }
+
+  function toggleModal(currentState, setState) {
+    const htmlClass = document.getElementsByTagName('html')[0].classList;
+    if (!currentState) {
+      htmlClass.add('overflow-y-hidden');
+      setState(true);
+    } else {
+      htmlClass.remove('overflow-y-hidden');
+      setState(false);
     }
+  }
 
-    function handleNotificationToggle() {
-        if (!showNotifications) {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.add("overflow-y-hidden");
-            setShowNotifications(true);
-        } else {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.remove("overflow-y-hidden");
-            setShowNotifications(false);
-        }
-    }
-
-    function handleSellerToggle() {
-        if (!showSellerModal) {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.add("overflow-y-hidden");
-            setShowSellerModal(true);
-        } else {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.remove("overflow-y-hidden");
-            setShowSellerModal(false);
-        }
-    }
-
-    function handleMessageToggle() {
-        if (!showMessageModal) {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.add("overflow-y-hidden");
-            setShowMessageModal(true);
-        } else {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.remove("overflow-y-hidden");
-            setShowMessageModal(false);
-        }
-    }
-
-    function handleDeleteListingsToggle() {
-        if (!showDeleteListingsModal) {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.add("overflow-y-hidden");
-            setShowDeleteListingsModal(true);
-        } else {
-            document
-                .getElementsByTagName("html")[0]
-                .classList.remove("overflow-y-hidden");
-            setShowDeleteListingsModal(false);
-        }
-    }
-
-    return (
-        <ModalContext.Provider
-            value={{
-                showLocationModal,
-                showNotifications,
-                showSellerModal,
-                showMessageModal,
-                showDeleteListingsModal,
-                handleLocationToggle,
-                handleMessageToggle,
-                handleNotificationToggle,
-                handleSellerToggle,
-                handleDeleteListingsToggle,
-            }}
-        >
-            {children}
-        </ModalContext.Provider>
-    );
+  return (
+    <ModalContext.Provider
+      value={{
+        showLocationModal,
+        showNotifications,
+        showSellerModal,
+        showMessageModal,
+        showDeleteListingsModal,
+        handleLocationToggle,
+        handleMessageToggle,
+        handleNotificationToggle,
+        handleSellerToggle,
+        handleDeleteListingsToggle,
+        notifications,
+        isLoading,
+      }}
+    >
+      {children}
+    </ModalContext.Provider>
+  );
 }
 
 ModalProvider.propTypes = {
-    children: PropTypes.node,
+  children: PropTypes.node.isRequired,
+  userData: PropTypes.object.isRequired,
 };
 
 export default ModalProvider;

@@ -70,7 +70,7 @@ function ListingInfo({ listingId }) {
           </p>
           {user.rate && (
             <p className='text-lg font-semibold text-[#720D96] mt-4'>
-              Rate: ${user.rate}/hr
+              Hourly Rate: ${user.rate}/hr
             </p>
           )}
         </div>

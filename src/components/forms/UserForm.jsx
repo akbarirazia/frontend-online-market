@@ -1,52 +1,52 @@
-import { useContext, useState } from 'react'
-import { toast } from 'react-toastify'
-import { updateProfile } from '../../services/AllProfiles' // Adjust the import path as needed
-import { FaCamera } from 'react-icons/fa'
-import FormInput from '../FormInput'
-import { AuthContext } from '../../context/AuthContext'
+import { useContext, useState } from 'react';
+import { toast } from 'react-toastify';
+import { updateProfile } from '../../services/AllProfiles'; // Adjust the import path as needed
+import { FaCamera } from 'react-icons/fa';
+import FormInput from '../FormInput';
+import { AuthContext } from '../../context/AuthContext';
 
 function UserForm({ formData, handleChange, saveChanges }) {
-  const [imagePreview, setImagePreview] = useState(null) // For previewing the image
+  const [imagePreview, setImagePreview] = useState(null); // For previewing the image
 
   const handleLocalChange = (e) => {
-    const { name, files } = e.target
+    const { name, files } = e.target;
     if (name === 'profilePicture') {
-      const file = files[0]
-      handleChange(e) // Propagate the change to parent state
+      const file = files[0];
+      handleChange(e); // Propagate the change to parent state
       if (file) {
-        setImagePreview(URL.createObjectURL(file)) // Set image preview
+        setImagePreview(URL.createObjectURL(file)); // Set image preview
       }
     }
-  }
+  };
 
   const handleSave = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       // Prepare FormData to send
-      const updatedData = new FormData()
+      const updatedData = new FormData();
 
       // Append form fields to FormData
-      updatedData.append('name', formData.name)
-      updatedData.append('headline', formData.headline)
-      updatedData.append('bio', formData.bio)
-      updatedData.append('about', formData.about)
+      updatedData.append('name', formData.name);
+      updatedData.append('headline', formData.headline);
+      updatedData.append('bio', formData.bio);
+      updatedData.append('rate', formData.rate);
 
       // Append file if available
       if (formData.profilePicture instanceof File) {
-        updatedData.append('profilePicture', formData.profilePicture)
+        updatedData.append('profilePicture', formData.profilePicture);
       }
-      console.log(updatedData)
+      console.log(updatedData);
 
       // Call the updateProfile function with the updatedData
-      await updateProfile(formData.id, updatedData) // Assuming updateProfile accepts FormData directly
-      toast.success('Profile updated successfully')
-      saveChanges()
+      await updateProfile(formData.id, updatedData); // Assuming updateProfile accepts FormData directly
+      toast.success('Profile updated successfully');
+      saveChanges();
     } catch (error) {
-      toast.error('Failed to update profile')
-      console.error('Error updating profile:', error)
+      toast.error('Failed to update profile');
+      console.error('Error updating profile:', error);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSave}>
@@ -100,7 +100,7 @@ function UserForm({ formData, handleChange, saveChanges }) {
           ariaLabelName='Name'
           onChange={handleChange}
           value={formData.name}
-          isRequired={true}
+          isRequired={false}
           labelClasses='text-base'
           className='sm:w-[40%] p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-[#720D96] hover:border-[#720D96] mt-2 mb-5'
         />
@@ -117,28 +117,28 @@ function UserForm({ formData, handleChange, saveChanges }) {
           className='sm:w-[40%] p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-[#720D96] hover:border-[#720D96] mt-2 mb-5'
         />
         <FormInput
-          inputLabel='Bio'
-          labelFor='bio'
-          inputType='text'
-          inputId='bio'
-          inputName='bio'
-          placeholderText={formData.bio}
-          ariaLabelName='Bio'
+          inputLabel='Rate'
+          labelFor='rate'
+          inputType='number'
+          inputId='rate'
+          inputName='rate'
+          placeholderText={formData.rate}
+          ariaLabelName='Rate'
           onChange={handleChange}
-          value={formData.bio}
+          value={formData.rate}
           className='sm:w-[40%] p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-[#720D96] hover:border-[#720D96] mt-2 mb-5'
         />
         <hr />
         <div className='pt-3 mb-5'>
           <h2>About</h2>
           <textarea
-            name='about'
-            id='about'
+            name='bio'
+            id='bio'
             cols={50}
             rows={5}
             onChange={handleChange}
             className='border border-[#D0D5DD] shadow-sm w-full rounded-md resize-none p-2 focus:outline-[#720D96] hover:border-[#720D96] mt-2'
-            value={formData.about}
+            // value={formData.bio}
             placeholder='Write a summary about yourself'
           ></textarea>
         </div>
@@ -150,7 +150,7 @@ function UserForm({ formData, handleChange, saveChanges }) {
         </button>
       </div>
     </form>
-  )
+  );
 }
 
-export default UserForm
+export default UserForm;

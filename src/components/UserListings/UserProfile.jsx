@@ -55,6 +55,7 @@ function UserProfile() {
       console.error('Error saving changes:', error);
     }
   };
+  console.log('this is the rate', userData.rate);
 
   return (
     <section>
@@ -105,7 +106,12 @@ function UserProfile() {
               <p className='text-[#77797c] my-2'>
                 Joined in {new Date(userData.createdAt).getFullYear()}
               </p>
-              <p className='text-[#77797c] my-3'>{userData.bio}</p>
+              <p className='text-[#77797c] my-3'>{userData.headline}</p>
+
+              <p className='text-lg font-semibold text-[#720D96] mt-4'>
+                Hourly Rate: ${userData.rate}/hr
+              </p>
+              <br />
               <hr />
               <div className='pt-3'>
                 <h2>About</h2>

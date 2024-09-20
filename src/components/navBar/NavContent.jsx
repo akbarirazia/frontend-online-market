@@ -20,16 +20,20 @@ function NavContent() {
   const [currentCategory, setCurrentCategory] = useState('Browse All');
   const { showCategory } = useContext(ListingsContext);
   const { isAuthenticated } = useContext(AuthContext);
-  const { handleNotificationToggle, handleLocationToggle } =
-    useContext(ModalContext);
+  const {
+    handleNotificationToggle,
+    handleLocationToggle,
+    notifications,
+    setNotifications,
+  } = useContext(ModalContext);
   const [services, setServices] = useState([]);
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const response = await showServicesAndUsers(); // Adjust the endpoint as needed
-        // console.log(response);
-        setServices(response); // Assuming response.data is an array of services
+        setServices(response); // Assuming response is an array of services
       } catch (err) {
         console.error('Error fetching services:', err);
       }
@@ -37,6 +41,12 @@ function NavContent() {
 
     fetchServices();
   }, []);
+
+  useEffect(() => {
+    if (notifications.length > 0) {
+      setHasUnreadNotifications(true);
+    }
+  }, [notifications]);
 
   function handleCategories() {
     setShowCategories((prev) => {
@@ -47,16 +57,15 @@ function NavContent() {
     });
   }
 
-  //   function handleSelection(e) {
-  //     const category = e.target.id;
-  //     console.log(category, 'value');
-  //     showCategory(category);
-  //     setCurrentCategory(category);
-  //   }
   function handleSelection(e) {
     const category = e.target.id;
     showCategory(category); // Call the function to filter profiles
     setCurrentCategory(category);
+  }
+
+  function handleOpenNotifications() {
+    handleNotificationToggle();
+    setHasUnreadNotifications(false); // Reset unread notifications indicator when modal is opened
   }
 
   return (
@@ -88,11 +97,16 @@ function NavContent() {
           </div>
           {isAuthenticated && (
             <div
-              onClick={handleNotificationToggle}
-              className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md`}
+              onClick={handleOpenNotifications}
+              className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md relative`}
             >
               <div className='rounded-full p-2 w-fit'>
                 <IoNotifications size={24} />
+                {hasUnreadNotifications && (
+                  <span className='absolute top-0 right-0 flex items-center justify-center h-5 w-5 rounded-full bg-red-600 text-white text-xs font-bold ring-2 ring-white shadow-md shadow-black'>
+                    {notifications.length}
+                  </span>
+                )}
               </div>
               <span>Notifications</span>
             </div>
@@ -154,10 +168,13 @@ function NavContent() {
             </p>
             {isAuthenticated && (
               <p
-                onClick={handleNotificationToggle}
-                className='p-2 sm:py-2 sm:px-3 rounded-3xl bg-[#e4e6eb]'
+                onClick={handleOpenNotifications}
+                className='p-2 sm:py-2 sm:px-3 rounded-3xl bg-[#e4e6eb] relative'
               >
                 Notifications
+                {hasUnreadNotifications && (
+                  <span className='absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-600' />
+                )}
               </p>
             )}
           </div>

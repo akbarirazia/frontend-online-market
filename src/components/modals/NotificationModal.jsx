@@ -12,27 +12,12 @@ import noNotificationIllustration from '../../assets/nonotifications.png';
 import ImageLoader from '../reusable/ImageLoader';
 import { AuthContext } from '../../context/AuthContext';
 import { fetchNotifications } from '../../services/GetNotification';
+import { ModalContext } from '../../context/ModalContext';
 
 function NotificationModal({ onClose }) {
   const [mouseEnter, setMouseEnter] = React.useState(false);
   const { isAuthenticated, userData } = useContext(AuthContext);
-  const [notifications, setNotifications] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadNotifications = async () => {
-      try {
-        const data = await fetchNotifications(userData.id);
-        setNotifications(data);
-      } catch (error) {
-        // Handle error (e.g., display a message)
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadNotifications();
-  }, [userData.id]);
+  const { notifications, isLoading } = useContext(ModalContext);
 
   return (
     <div className=''>
