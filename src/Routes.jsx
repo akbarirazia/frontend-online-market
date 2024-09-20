@@ -1,70 +1,50 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense } from 'react';
 import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Navigate,
-} from "react-router-dom";
-import ProtectedRoutes from "./components/ProtectedRoutes";
-import UserProfile from "./pages/UserProfile";
-const SignUp = lazy(() => import("./pages/authPages/SignUp"));
-const SignIn = lazy(() => import("./pages/authPages/SignIn"));
-const ForgotPassword = lazy(() => import("./pages/authPages/ForgotPassword"));
-const SingleListing = lazy(() => import("./pages/SingleListing"));
-const Listings = lazy(() => import("./pages/Listings"));
-const CreateListing = lazy(() => import("./pages/CreateListing"));
-const SearchPage = lazy(() => import("./pages/SearchPage"));
-const Home = lazy(() => import("./pages/Home"));
-const UserListings = lazy(() => import("./pages/UserListings"));
-const ListingsBought = lazy(() => import("./pages/ListingsBought"));
-const Favorites = lazy(() => import("./pages/Favorites"));
-const ChangePassword = lazy(() => import("./pages/authPages/ChangePassword"));
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import ProtectedRoutes from './components/ProtectedRoutes';
+import UserProfile from './pages/UserProfile';
+const SignUp = lazy(() => import('./pages/authPages/SignUp'));
+const SignIn = lazy(() => import('./pages/authPages/SignIn'));
+const ForgotPassword = lazy(() => import('./pages/authPages/ForgotPassword'));
+const SingleListing = lazy(() => import('./pages/SingleListing'));
+const Listings = lazy(() => import('./pages/Listings'));
+const CreateListing = lazy(() => import('./pages/CreateListing'));
+const SearchPage = lazy(() => import('./pages/SearchPage'));
+const Home = lazy(() => import('./pages/Home'));
+const UserListings = lazy(() => import('./pages/UserListings'));
+const ListingsBought = lazy(() => import('./pages/ListingsBought'));
+const Favorites = lazy(() => import('./pages/Favorites'));
+const ChangePassword = lazy(() => import('./pages/authPages/ChangePassword'));
 
 export function PageRoutes() {
-    return (
-        <Router>
-            <Suspense fallback={""}>
-                <Routes>
-                    {/* unauthorized route  */}
-                    <Route exact path="/" element={<Home />} />
-                    <Route exact path="/signup" element={<SignUp />} />
-                    <Route exact path="/signin" element={<SignIn />} />
-                    <Route exact path="/listing" element={<SingleListing />} />
-                    <Route exact path="/dashboard" element={<UserListings />} />
-                    <Route exact path="/selling" element={<UserListings />} />
-                    <Route exact path="/buying" element={<ListingsBought />} />
-                    <Route exact path="/favorites" element={<Favorites />} />
-                    <Route
-                        exact
-                        path="/userprofile"
-                        element={<UserProfile />}
-                    />
-                    <Route
-                        exact
-                        path="/searchmarketplace"
-                        element={<SearchPage />}
-                    />
-                    <Route
-                        exact
-                        path="/forgotpassword"
-                        element={<ForgotPassword />}
-                    />
-                    <Route exact path="/listings" element={<Listings />} />
-                    <Route
-                        exact
-                        path="/changepassword"
-                        element={<ChangePassword />}
-                    />
+  return (
+    <Router>
+      <Suspense fallback={''}>
+        <Routes>
+          {/* unauthorized route  */}
+          <Route exact path='/' element={<Home />} />
+          <Route exact path='/signup' element={<SignUp />} />
+          <Route exact path='/signin' element={<SignIn />} />
+          <Route exact path='/listing/:id' element={<SingleListing />} />
+          <Route exact path='/dashboard' element={<UserListings />} />
+          <Route exact path='/selling' element={<UserListings />} />
+          <Route exact path='/buying' element={<ListingsBought />} />
+          <Route exact path='/favorites' element={<Favorites />} />
+          <Route exact path='/userprofile' element={<UserProfile />} />
+          <Route exact path='/searchmarketplace' element={<SearchPage />} />
+          <Route exact path='/forgotpassword' element={<ForgotPassword />} />
+          <Route exact path='/listings' element={<Listings />} />
+          <Route exact path='/changepassword' element={<ChangePassword />} />
 
-                    {/* Protected Routes */}
-                    <Route element={<ProtectedRoutes />}>
-                        <Route
-                            exact
-                            path="/create"
-                            element={<CreateListing />}
-                        />
-                    </Route>
-                    {/* <Route element={<ProtectedRoutes />}>
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoutes />}>
+            <Route exact path='/create' element={<CreateListing />} />
+          </Route>
+          {/* <Route element={<ProtectedRoutes />}>
                     <Route exact path="/signup" element={<SignUp />} />
                     <Route exact path="/signin" element={<SignIn />} />
                     <Route
@@ -116,10 +96,10 @@ export function PageRoutes() {
                         </>
                     )}
                 </Route> */}
-                    {/* Catch-all route */}
-                    <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-            </Suspense>
-        </Router>
-    );
+          {/* Catch-all route */}
+          <Route path='*' element={<Navigate to='/' />} />
+        </Routes>
+      </Suspense>
+    </Router>
+  );
 }

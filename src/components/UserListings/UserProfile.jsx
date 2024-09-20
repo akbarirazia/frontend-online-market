@@ -1,60 +1,60 @@
-import { useContext, useState } from 'react'
-import Button from '../reusable/Button'
-import { motion } from 'framer-motion'
-import UserForm from '../forms/UserForm'
-import { AuthContext } from '../../context/AuthContext'
-import { updateProfile } from '../../services/AllProfiles'
-import { toast } from 'react-toastify'
+import { useContext, useState } from 'react';
+import Button from '../reusable/Button';
+import { motion } from 'framer-motion';
+import UserForm from '../forms/UserForm';
+import { AuthContext } from '../../context/AuthContext';
+import { updateProfile } from '../../services/AllProfiles';
+import { toast } from 'react-toastify';
 
 function UserProfile() {
-  const [isEditRequested, setIsEditRequested] = useState(false)
-  const { isAuthenticated, userData, updateUser } = useContext(AuthContext)
+  const [isEditRequested, setIsEditRequested] = useState(false);
+  const { isAuthenticated, userData, updateUser } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: userData?.name || '',
     headline: userData?.headline || '',
     bio: userData?.bio || '',
     profilePicture: null,
     about: userData?.about || '',
-  })
+  });
 
   function handleChange(e) {
-    const { name, value, files } = e.target
+    const { name, value, files } = e.target;
     setFormData((prevState) => ({
       ...prevState,
       [name]: files ? files[0] : value,
-    }))
+    }));
   }
 
   const saveChanges = async () => {
-    console.log(formData)
+    console.log(formData);
 
     try {
       // Prepare FormData to send
-      const updatedData = new FormData()
+      const updatedData = new FormData();
 
       // Append form fields to FormData
-      updatedData.append('name', formData.name)
-      updatedData.append('headline', formData.headline)
-      updatedData.append('bio', formData.bio)
+      updatedData.append('name', formData.name);
+      updatedData.append('headline', formData.headline);
+      updatedData.append('bio', formData.bio);
       if (formData.profilePicture) {
-        updatedData.append('profilePicture', formData.profilePicture)
+        updatedData.append('profilePicture', formData.profilePicture);
       }
-      updatedData.append('about', formData.about)
+      updatedData.append('about', formData.about);
 
       // Update the profile using the API call
-      const response = await updateProfile(userData.id, updatedData)
+      const response = await updateProfile(userData.id, updatedData);
 
       // Update the context with new user data
-      updateUser(response) // Assuming response.data contains the updated user data
+      updateUser(response); // Assuming response.data contains the updated user data
 
       // Notify user of success
-      toast.success('Profile updated successfully')
-      setIsEditRequested(false)
+      toast.success('Profile updated successfully');
+      setIsEditRequested(false);
     } catch (error) {
-      toast.error('Failed to update profile')
-      console.error('Error saving changes:', error)
+      toast.error('Failed to update profile');
+      console.error('Error saving changes:', error);
     }
-  }
+  };
 
   return (
     <section>
@@ -109,7 +109,7 @@ function UserProfile() {
               <hr />
               <div className='pt-3'>
                 <h2>About</h2>
-                <p>{userData.about}</p>
+                <p>{userData.bio}</p>
               </div>
             </div>
           </div>
@@ -123,7 +123,7 @@ function UserProfile() {
         />
       )}
     </section>
-  )
+  );
 }
 
-export default UserProfile
+export default UserProfile;

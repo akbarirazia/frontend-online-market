@@ -1,119 +1,153 @@
-import React, { useContext } from "react";
-import Button from "../reusable/Button";
-import { FaHeart } from "react-icons/fa";
-import { IoIosShareAlt } from "react-icons/io";
-import image from "../../assets/image1.png";
-import { TiMessages } from "react-icons/ti";
-import { AuthContext } from "../../context/AuthContext";
-import { ModalContext } from "../../context/ModalContext";
+import React, { useContext, useEffect, useState } from 'react';
+import Button from '../reusable/Button';
+import { FaHeart } from 'react-icons/fa';
+import { IoIosShareAlt } from 'react-icons/io';
+import { TiMessages } from 'react-icons/ti';
+import { AuthContext } from '../../context/AuthContext';
+import { ModalContext } from '../../context/ModalContext';
+import imagePlaceholder from '../../assets/image1.png'; // Placeholder if image is unavailable
+import { getSingleProfile } from '../../services/AllProfiles';
+import RequestServiceModal from '../modals/RequestService';
 
-function ListingInfo() {
-    const [showFullDescription, setShowFullDescription] = React.useState(false);
-    const { isAuthenticated } = useContext(AuthContext);
-    const { handleMessageToggle, handleSellerToggle } = useContext(ModalContext);
+function ListingInfo({ listingId }) {
+  const { isAuthenticated } = useContext(AuthContext);
+  const { handleMessageToggle, handleSellerToggle } = useContext(ModalContext);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showFullBio, setShowFullBio] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    console.log(isAuthenticated, "listinginfo auth status")
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
 
-    return (
-        <div className="md:flex-1 px-2 pb-10 md:pb-0">
-            <div className="md:pl-10 lg:pl-0 2xl:pl-10">
-                <h1 className="font-semibold text-2xl xl:text-3xl mb-2">
-                    Plain Sleeve Kangaroo Pocket Drawstring Hoodie
-                </h1>
-                <p className="text-[#720D96] text-xl xl:text-2xl font-semibold mb-2">
-                    $67
-                </p>
-                <p className="text-[#b3b4b6] font-medium rounded-lg mb-2">
-                    Listed 2 weeks ago in Lagos
-                </p>
-                <div className="flex items-center gap-5 mb-5">
-                    {isAuthenticated && (
-                        <div>
-                            <Button
-                                className="hidden md:block text-black text-base lg:text-lg font-bold p-4 border bg-white border-[#720D96] rounded-md hover:bg-[#720D96] hover:text-white"
-                                onClick={handleMessageToggle}
-                            >
-                                Message
-                            </Button>
-                            <Button
-                                onClick={handleMessageToggle}
-                                className="md:hidden border border-[#720D96] p-4 rounded-full bg-white hover:bg-[#720D96] hover:text-white active:bg-[#720D96] active:text-white"
-                            >
-                                <TiMessages size={25} />
-                            </Button>
-                        </div>
-                    )}
-                    {isAuthenticated && (
-                        <Button className="bg-white border border-[#720D96] p-4 rounded-full md:rounded-md hover:bg-[#720D96] hover:text-white active:bg-[#720D96] active:text-white">
-                            <FaHeart size={25} />
-                        </Button>
-                    )}
-                    <Button className="bg-white border border-[#720D96] p-4 rounded-full md:rounded-md hover:bg-[#720D96] hover:text-white active:bg-[#720D96] active:text-white">
-                        <IoIosShareAlt size={25} />
-                    </Button>
-                </div>
-                <hr />
-                <div className="mt-3">
-                    <h5 className="text-xl font-semibold">Description</h5>
-                    {!showFullDescription && (
-                        <p className="lg:text-lg mb-5">
-                            It is a long established fact that a reader will be
-                            distracted by the readable content of a page when
-                            looking at its layout...{" "}
-                            <span
-                                className="underline text-[#b3b4b6] cursor-pointer hover:text-[#141414]"
-                                onClick={() => setShowFullDescription(true)}
-                            >
-                                Read more
-                            </span>
-                        </p>
-                    )}
-                    {showFullDescription && (
-                        <p className="lg:text-lg mb-5">
-                            It is a long established fact that a reader will be
-                            distracted by the readable content of a page when
-                            looking at its layout. This hoodie is very
-                            comfortable and soft on the skin{" "}
-                            <span
-                                className="underline text-[#b3b4b6] cursor-pointer hover:text-[#141414]"
-                                onClick={() => setShowFullDescription(false)}
-                            >
-                                Show less
-                            </span>
-                        </p>
-                    )}
-                </div>
-                <hr />
-                <div className="mt-3">
-                    <div className="flex justify-between items-center">
-                        <span className="font-semibold text-xl">
-                            Seller information
-                        </span>
-                        <span
-                            onClick={handleSellerToggle}
-                            className="text-[#720D96] lg:text-lg cursor-pointer transition ease-in-out hover:underline duration-500"
-                        >
-                            Seller details
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-3 mt-5">
-                        <img
-                            src={image}
-                            alt=""
-                            className="rounded-full w-20 hover:opacity-90 cursor-pointer"
-                            onClick={handleSellerToggle}
-                        />
-                        <p
-                            className="lg:text-lg font-medium hover:underline cursor-pointer"
-                            onClick={handleSellerToggle}
-                        >
-                            Sophia Princess
-                        </p>
-                    </div>
-                </div>
-            </div>
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+  console.log(listingId);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const data = await getSingleProfile(listingId);
+        setUser(data);
+        console.log(data);
+      } catch (error) {
+        console.error('Failed to load user profile:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadUser();
+  }, [listingId]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
+  return (
+    <div className='flex flex-col md:flex-row md:py-8'>
+      {/* User Profile Section */}
+      <div className=' p-5'>
+        <div className='flex flex-col items-center'>
+          <img
+            src={user.profilePicture || imagePlaceholder}
+            alt={user.name}
+            className='w-40 h-40 rounded-full object-cover'
+          />
+          <h2 className='mt-4 text-2xl font-bold'>{user.name}</h2>
+          <p className='text-lg text-gray-600'>
+            {user.headline || 'No headline available'}
+          </p>
+          <p className='text-md text-gray-500 mt-2'>
+            {user.role === 'serviceSeeker'
+              ? 'Looking for services'
+              : 'Offering services'}
+          </p>
+          {user.rate && (
+            <p className='text-lg font-semibold text-[#720D96] mt-4'>
+              Rate: ${user.rate}/hr
+            </p>
+          )}
         </div>
-    );
+        <div className='flex gap-4 justify-center mt-6'>
+          {isAuthenticated && (
+            <>
+              <Button
+                className='border border-[#720D96] px-6 py-2 rounded-md bg-white hover:bg-[#720D96] hover:text-white'
+                onClick={handleMessageToggle}
+              >
+                Message <TiMessages className='inline-block ml-2' size={20} />
+              </Button>
+              <div>
+                <Button
+                  className='border border-[#720D96] px-6 py-2 rounded-md bg-white hover:bg-[#720D96] hover:text-white'
+                  onClick={handleModalOpen}
+                >
+                  Request Service
+                </Button>
+
+                {isModalOpen && (
+                  <RequestServiceModal
+                    onClose={handleModalClose}
+                    id={listingId}
+                  />
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* User Bio and Actions */}
+      <div className='md:w-2/3 p-5'>
+        <div className='mb-5'>
+          <h3 className='text-xl font-semibold'>Bio</h3>
+          {user.bio ? (
+            <>
+              <p className='text-md mt-2'>
+                {showFullBio ? user.bio : `${user.bio.substring(0, 100)}...`}
+                {user.bio.length > 100 && (
+                  <span
+                    className='text-[#720D96] cursor-pointer ml-2'
+                    onClick={() => setShowFullBio(!showFullBio)}
+                  >
+                    {showFullBio ? 'Show less' : 'Read more'}
+                  </span>
+                )}
+              </p>
+            </>
+          ) : (
+            <p className='text-gray-500'>No bio available</p>
+          )}
+          <h3 className='text-xl font-semibold'> User Email Address:</h3>
+          {user.email ? (
+            <>
+              <p className='text-md mt-2'>
+                <span className='text-[#720D96] cursor-pointer '>
+                  {user.email}
+                </span>
+              </p>
+            </>
+          ) : (
+            <p className='text-gray-500'>No bio available</p>
+          )}
+        </div>
+        <div className='flex gap-4'>
+          <Button className='bg-white border border-[#720D96] p-4 rounded-full hover:bg-[#720D96] hover:text-white'>
+            <FaHeart size={20} />
+          </Button>
+          <Button className='bg-white border border-[#720D96] p-4 rounded-full hover:bg-[#720D96] hover:text-white'>
+            <IoIosShareAlt size={20} />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default ListingInfo;

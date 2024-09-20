@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import { FaRegHeart, FaHeart } from 'react-icons/fa'
-import { RiDeleteBin6Line } from 'react-icons/ri'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
-import 'react-lazy-load-image-component/src/effects/blur.css'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { FaRegHeart, FaHeart } from 'react-icons/fa';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
-import ImageLoader from '../reusable/ImageLoader'
-import { ModalContext } from '../../context/ModalContext'
+import ImageLoader from '../reusable/ImageLoader';
+import { ModalContext } from '../../context/ModalContext';
 
 function ListingSingle({
   title,
@@ -20,32 +20,32 @@ function ListingSingle({
   isSellerListings,
   setListingId,
 }) {
-  const [liked, setLiked] = React.useState(false)
-  const [likedPosts, setLikedPosts] = React.useState([])
-  const { handleDeleteListingsToggle } = React.useContext(ModalContext)
+  const [liked, setLiked] = React.useState(false);
+  const [likedPosts, setLikedPosts] = React.useState([]);
+  const { handleDeleteListingsToggle } = React.useContext(ModalContext);
 
   function handleLike(e) {
-    console.log(e.target.id, 'event')
-    const listingId = e.target.id
-    e.stopPropagation()
+    console.log(e.target.id, 'event');
+    const listingId = e.target.id;
+    e.stopPropagation();
     if (!likedPosts.includes(listingId)) {
       setLikedPosts((prevState) => {
-        return [...prevState, listingId]
-      })
+        return [...prevState, listingId];
+      });
     }
-    setLiked(true)
-    console.log(likedPosts, 'liked posts')
+    setLiked(true);
+    console.log(likedPosts, 'liked posts');
   }
 
   function deleteListing() {
-    handleDeleteListingsToggle()
-    setListingId(id)
+    handleDeleteListingsToggle();
+    setListingId(id);
   }
 
   return (
     <div className='relative lg:border rounded-md text-lg mb-2 lg:p-2 transition ease-in-out hover:scale-105 duration-300 hover:shadow'>
       <Link
-        to={'/listing'}
+        to={`/listing/${id}`}
         className='cursor-pointer h-full flex flex-col justify-between'
         onClick={window.scrollTo(0, 0)}
       >
@@ -89,11 +89,11 @@ function ListingSingle({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 ListingSingle.propTypes = {
   isSellerListings: PropTypes.boolean,
-}
+};
 
-export default ListingSingle
+export default ListingSingle;
