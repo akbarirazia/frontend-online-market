@@ -20,14 +20,10 @@ function NavContent() {
   const [currentCategory, setCurrentCategory] = useState('Browse All');
   const { showCategory } = useContext(ListingsContext);
   const { isAuthenticated } = useContext(AuthContext);
-  const {
-    handleNotificationToggle,
-    handleLocationToggle,
-    notifications,
-    setNotifications,
-  } = useContext(ModalContext);
+  const { handleNotificationToggle, handleLocationToggle, notifications } =
+    useContext(ModalContext);
   const [services, setServices] = useState([]);
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -43,9 +39,11 @@ function NavContent() {
   }, []);
 
   useEffect(() => {
-    if (notifications.length > 0) {
-      setHasUnreadNotifications(true);
-    }
+    // Filter unread notifications and update the count
+    const unreadNotifications = notifications.filter(
+      (notification) => !notification.read
+    );
+    setUnreadNotificationsCount(unreadNotifications.length);
   }, [notifications]);
 
   function handleCategories() {
@@ -65,7 +63,8 @@ function NavContent() {
 
   function handleOpenNotifications() {
     handleNotificationToggle();
-    setHasUnreadNotifications(false); // Reset unread notifications indicator when modal is opened
+    // Reset unread notifications count when opening notifications
+    // setUnreadNotificationsCount(0);
   }
 
   return (
@@ -102,9 +101,9 @@ function NavContent() {
             >
               <div className='rounded-full p-2 w-fit'>
                 <IoNotifications size={24} />
-                {hasUnreadNotifications && (
-                  <span className='absolute top-0 right-0 flex items-center justify-center h-5 w-5 rounded-full bg-red-600 text-white text-xs font-bold ring-2 ring-white shadow-md shadow-black'>
-                    {notifications.length}
+                {unreadNotificationsCount > 0 && (
+                  <span className='absolute top-0 right-0 flex items-center justify-center h-5 w-5 rounded-full bg-red-600 text-white text-xs font-bold ring-2 ring-white shadow-sm shadow-black'>
+                    {unreadNotificationsCount}
                   </span>
                 )}
               </div>
@@ -172,7 +171,7 @@ function NavContent() {
                 className='p-2 sm:py-2 sm:px-3 rounded-3xl bg-[#e4e6eb] relative'
               >
                 Notifications
-                {hasUnreadNotifications && (
+                {unreadNotificationsCount > 0 && (
                   <span className='absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-600' />
                 )}
               </p>
@@ -205,7 +204,6 @@ function NavContent() {
           </div>
         </div>
       </div>
-      {/* Uncomment if needed */}
       {showCategories && (
         <MobileCategories
           services={services}

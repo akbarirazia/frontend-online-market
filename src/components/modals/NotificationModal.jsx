@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   IoMdArrowBack,
   IoMdCloseCircle,
@@ -7,6 +7,7 @@ import {
   IoIosNotificationsOff,
 } from 'react-icons/io';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 import noNotificationIllustration from '../../assets/nonotifications.png';
 import ImageLoader from '../reusable/ImageLoader';
@@ -15,9 +16,31 @@ import { fetchNotifications } from '../../services/GetNotification';
 import { ModalContext } from '../../context/ModalContext';
 
 function NotificationModal({ onClose }) {
-  const [mouseEnter, setMouseEnter] = React.useState(false);
+  const [mouseEnter, setMouseEnter] = useState(false);
   const { isAuthenticated, userData } = useContext(AuthContext);
-  const { notifications, isLoading } = useContext(ModalContext);
+  const { notifications, isLoading, setNotifications } =
+    useContext(ModalContext);
+
+  // Function to handle the read/unread toggle
+  const handleReadStatusChange = async (id, currentReadStatus) => {
+    const newReadStatus = !currentReadStatus; // Toggle the read status
+
+    try {
+      await axios.patch(`http://localhost:5000/api/notification/${id}`, {
+        read: newReadStatus,
+      });
+      // Update the notification read status in the state
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification.id === id
+            ? { ...notification, read: newReadStatus }
+            : notification
+        )
+      );
+    } catch (error) {
+      console.error('Error updating notification status:', error);
+    }
+  };
 
   return (
     <div className=''>
@@ -61,12 +84,39 @@ function NotificationModal({ onClose }) {
                     {notifications.map((notification) => (
                       <li
                         key={notification.id}
-                        className='bg-gray-100 hover:bg-gray-200 p-4 rounded-lg shadow transition duration-200'
+                        className={`${
+                          !notification.read ? 'bg-gray-100' : 'bg-gray-300'
+                        } hover:bg-gray-200 p-4 rounded-lg shadow transition duration-200`}
                       >
-                        <p className='text-gray-800'>{notification.message}</p>
-                        <span className='text-sm text-gray-500'>
-                          {new Date(notification.createdAt).toLocaleString()}
-                        </span>
+                        <div className='flex justify-between items-center'>
+                          <div>
+                            <p className='text-gray-800'>
+                              {notification.message}
+                            </p>
+                            <span className='text-sm text-gray-500'>
+                              {new Date(
+                                notification.createdAt
+                              ).toLocaleString()}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() =>
+                              handleReadStatusChange(
+                                notification.id,
+                                notification.read
+                              )
+                            }
+                            className={`text-xs font-semibold px-2 py-1 rounded ${
+                              !notification.read
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-green-500 text-white'
+                            }`}
+                          >
+                            {!notification.read
+                              ? 'Mark as Read'
+                              : 'Mark as Unread'}
+                          </button>
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -115,12 +165,33 @@ function NotificationModal({ onClose }) {
               {notifications.map((notification) => (
                 <li
                   key={notification.id}
-                  className='bg-gray-100 hover:bg-gray-200 p-4 rounded-lg shadow transition duration-200'
+                  className={`${
+                    !notification.read ? 'bg-gray-100' : 'bg-gray-300'
+                  } hover:bg-gray-200 p-4 rounded-lg shadow transition duration-200`}
                 >
-                  <p className='text-gray-800'>{notification.message}</p>
-                  <span className='text-sm text-gray-500'>
-                    {new Date(notification.createdAt).toLocaleString()}
-                  </span>
+                  <div className='flex justify-between items-center'>
+                    <div>
+                      <p className='text-gray-800'>{notification.message}</p>
+                      <span className='text-sm text-gray-500'>
+                        {new Date(notification.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() =>
+                        handleReadStatusChange(
+                          notification.id,
+                          notification.read
+                        )
+                      }
+                      className={`text-xs font-semibold px-2 py-1 rounded ${
+                        !notification.read
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-green-500 text-white'
+                      }`}
+                    >
+                      {!notification.read ? 'Mark as Read' : 'Mark as Unread'}
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>

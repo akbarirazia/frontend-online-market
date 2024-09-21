@@ -15,7 +15,6 @@ function ModalProvider({ children }) {
   const [notifications, setNotifications] = useState([]);
   const { userData } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
-  console.log('this is running');
 
   useEffect(() => {
     const loadNotifications = async () => {
@@ -34,6 +33,7 @@ function ModalProvider({ children }) {
     loadNotifications(); // Fetch on component mount
   }, [userData]);
 
+  // Handle toggling different modals
   function handleLocationToggle() {
     toggleModal(showLocationModal, setShowLocationModal);
   }
@@ -79,6 +79,7 @@ function ModalProvider({ children }) {
         handleSellerToggle,
         handleDeleteListingsToggle,
         notifications,
+        setNotifications, // Expose the setter to allow updates outside this context
         isLoading,
       }}
     >
