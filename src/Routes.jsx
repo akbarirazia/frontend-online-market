@@ -8,6 +8,8 @@ import {
 import ProtectedRoutes from './components/ProtectedRoutes';
 import UserProfile from './pages/UserProfile';
 import Media from './pages/Media';
+import Projects from './components/UserListings/Projects';
+import ProjectsLayout from './pages/ProjectsLayout';
 const SignUp = lazy(() => import('./pages/authPages/SignUp'));
 const SignIn = lazy(() => import('./pages/authPages/SignIn'));
 const ForgotPassword = lazy(() => import('./pages/authPages/ForgotPassword'));
@@ -33,7 +35,7 @@ export function PageRoutes() {
           <Route exact path='/listing/:id' element={<SingleListing />} />
           <Route exact path='/dashboard' element={<UserListings />} />
           <Route exact path='/selling' element={<UserListings />} />
-          <Route exact path='/buying' element={<ListingsBought />} />
+          <Route exact path='/projects' element={<ProjectsLayout />} />
           <Route exact path='/favorites' element={<Favorites />} />
           <Route exact path='/userprofile' element={<UserProfile />} />
           <Route exact path='/searchmarketplace' element={<SearchPage />} />

@@ -19,6 +19,8 @@ function ListingSingle({
   id,
   isSellerListings,
   setListingId,
+  rate,
+  bio,
 }) {
   const [liked, setLiked] = React.useState(false);
   const [likedPosts, setLikedPosts] = React.useState([]);
@@ -47,8 +49,9 @@ function ListingSingle({
       <Link
         to={`/listing/${id}`}
         className='cursor-pointer h-full flex flex-col justify-between'
-        onClick={window.scrollTo(0, 0)}
+        onClick={() => window.scrollTo(0, 0)}
       >
+        {/* Image Section */}
         <LazyLoadImage
           src={img}
           alt='Listing Image'
@@ -58,15 +61,31 @@ function ListingSingle({
             style: { transitionDelay: '1s' },
           }}
         />
-        <div className='flex justify-between'>
-          <div className='text-sm lg:text-base pl-2'>
+
+        {/* Content Section */}
+        <div className='flex flex-col justify-between p-2'>
+          <div className='text-sm lg:text-base'>
             <p className='font-medium text-lg'>{title}</p>
-            <h1>{headline}</h1>
-            <p>{location}</p>
+            <h1 className='font-semibold text-xl text-[#720D96]'>{headline}</h1>
+            <p>Kabul, Afghanistan</p>
+
+            {/* Status Section: Rate or Bio */}
+            <div className='mt-2'>
+              <p className='text-[#ac37d7]  text-sm'>
+                <span className='text-[#000] font-semibold'>Rate:</span> ${rate}{' '}
+                per hour
+              </p>
+
+              {/* <p className='text-sm text-gray-600 italic'>
+                  {bio ? `"${bio.substring(0, 60)}..."` : 'No bio available'}
+                </p> */}
+            </div>
           </div>
         </div>
       </Link>
-      {!isSellerListings ? (
+
+      {/* Conditional Heart or Delete Button */}
+      {/* {!isSellerListings ? (
         <div className='absolute top-2 right-2' onClick={(e) => handleLike(e)}>
           {!liked ? (
             <FaRegHeart
@@ -87,13 +106,21 @@ function ListingSingle({
             size={`${window.innerWidth < 640 ? 25 : 20}`}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 }
 
 ListingSingle.propTypes = {
-  isSellerListings: PropTypes.boolean,
+  title: PropTypes.string.isRequired,
+  headline: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+  img: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  isSellerListings: PropTypes.bool,
+  setListingId: PropTypes.func,
+  rate: PropTypes.number, // Optional if provided
+  bio: PropTypes.string, // Optional if provided
 };
 
 export default ListingSingle;

@@ -24,13 +24,7 @@ function UserListingsNavBar({ pageName }) {
             </Link>
           </div>
         </header>
-        <div className='mt-5'>
-          <Link to={'/create'}>
-            <Button className='p-4 rounded-md w-full bg-[#e8d7ee] text-[#720D96] font-semibold transition ease-in-out hover:text-white hover:bg-[#720D96]'>
-              + Create a New Listing
-            </Button>
-          </Link>
-        </div>
+        <div className='mt-5'></div>
         <div className='mt-5'>
           <NavLink
             to={'/userprofile'}
@@ -61,6 +55,21 @@ function UserListingsNavBar({ pageName }) {
               <MdAnalytics size={20} id='Seller dashboard' />
             </div>
             <span id='Seller dashboard'>User dashboard</span>
+          </NavLink>
+          <NavLink
+            to={'/projects'}
+            id='projects'
+            className={({ isActive }) => {
+              return (
+                'flex items-center gap-2 p-2 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ' +
+                (isActive ? 'bg-[#e8d7ee] text-[#720d96]' : '')
+              );
+            }}
+          >
+            <div className={`bg-[#e4e6eb] rounded-full p-2`}>
+              <MdAnalytics size={20} id='projects' />
+            </div>
+            <span id='Seller projects'>User Projects</span>
           </NavLink>
 
           <NavLink

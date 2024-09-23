@@ -62,7 +62,7 @@ function UserProfile() {
       console.error('Error saving changes:', error);
     }
   };
-  console.log('this is the rate', userData.rate);
+  // console.log('this is the rate', userData.rate);
 
   return (
     <section>

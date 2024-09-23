@@ -6,6 +6,7 @@ import { MdLocationPin } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
 import { IoNotifications } from 'react-icons/io5';
 import { Icons } from '../../data/listings'; // Adjust the import path
+import { MdSupportAgent } from 'react-icons/md';
 
 import Button from '../reusable/Button';
 import profile from '../../assets/profile.svg';
@@ -73,16 +74,16 @@ function NavContent() {
     <div>
       <div className='hidden lg:block'>
         {isAuthenticated && (
-          <div className='mb-5'>
-            <Link to={'/create'}>
+          <div className=''>
+            {/* <Link to={'/create'}>
               <Button className='p-4 rounded-md w-full bg-[#e8d7ee] text-[#720D96] font-semibold transition ease-in-out hover:text-white hover:bg-[#720D96]'>
                 + Create a New Listing
               </Button>
-            </Link>
+            </Link> */}
           </div>
         )}
         <Link to='/listings'>
-          <div className='pt-5'>
+          <div className=''>
             <div
               onClick={handleSelection}
               id='Browse All'
@@ -95,7 +96,7 @@ function NavContent() {
               <div className='rounded-full p-2'>
                 <FaShop size={24} />
               </div>
-              <span>Browse Service Providers</span>
+              <span>Browse All</span>
             </div>
             <Link to='/media'>
               <div
@@ -114,20 +115,38 @@ function NavContent() {
               </div>
             </Link>
             {isAuthenticated && (
-              <div
-                onClick={handleOpenNotifications}
-                className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md relative`}
-              >
-                <div className='rounded-full p-2 w-fit'>
-                  <IoNotifications size={24} />
-                  {unreadNotificationsCount > 0 && (
-                    <span className='absolute top-0 right-0 flex items-center justify-center h-5 w-5 rounded-full bg-red-600 text-white text-xs font-bold ring-2 ring-white shadow-sm shadow-black'>
-                      {unreadNotificationsCount}
-                    </span>
-                  )}
+              <>
+                <div
+                  onClick={handleOpenNotifications}
+                  className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md relative`}
+                >
+                  <div className='rounded-full p-2 w-fit'>
+                    <IoNotifications size={24} />
+                    {unreadNotificationsCount > 0 && (
+                      <span className='absolute top-0 right-0 flex items-center justify-center h-5 w-5 rounded-full bg-red-600 text-white text-xs font-bold ring-2 ring-white shadow-sm shadow-black'>
+                        {unreadNotificationsCount}
+                      </span>
+                    )}
+                  </div>
+                  <span>Notifications</span>
                 </div>
-                <span>Notifications</span>
-              </div>
+                <Link to='/support'>
+                  <div
+                    onClick={handleSelection}
+                    id='support'
+                    className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
+                      currentCategory === 'support'
+                        ? 'bg-[#e8d7ee] text-[#720d96]'
+                        : ''
+                    }`}
+                  >
+                    <div className='rounded-full p-2'>
+                      <MdSupportAgent size={24} />
+                    </div>
+                    <span>Support </span>
+                  </div>
+                </Link>
+              </>
             )}
             <hr className='my-3' />
             <h1 className='font-semibold text-lg'>Categories</h1>

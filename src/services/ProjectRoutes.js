@@ -38,4 +38,13 @@ export const ProjectService = {
       throw error; // Rethrow the error for handling in components
     }
   },
+  deleteProject: async (projectId) => {
+    try {
+      const response = await axios.delete(`${API_URL}/${projectId}`);
+      return response.message; // Return the deleted project ID or message (if successful)
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      throw error; // Rethrow the error for handling in components
+    }
+  },
 };

@@ -1,11 +1,22 @@
 import React from 'react';
 import { mediaPosts } from '../../data/mockData'; // Importing mock data
+import { Link } from 'react-router-dom';
+import Button from '../reusable/Button';
 
 function MediaGrid() {
   return (
     <div className='min-h-screen bg-gray-100 py-10 px-5'>
       <div className='container mx-auto'>
-        <h1 className='text-4xl font-bold mb-8 text-primary'>Media Listings</h1>
+        <div className='flex justify-between'>
+          <h1 className='text-4xl font-bold mb-8 text-primary'>
+            Media Listings
+          </h1>
+          <Link to={'/create'}>
+            <Button className='p-4 rounded-md w-full bg-[#e8d7ee] text-[#720D96] font-semibold transition ease-in-out hover:text-white hover:bg-[#720D96]'>
+              + Create a New Post
+            </Button>
+          </Link>
+        </div>
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
           {mediaPosts.map((post) => (
             <div

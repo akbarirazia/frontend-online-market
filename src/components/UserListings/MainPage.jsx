@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import SellingListings from './SellingListings';
-import ListingsBought from './ListingsBought';
+import Projects from './Projects';
 import FavoriteListings from './FavoriteListings';
 import UserProfile from './UserProfile';
 
@@ -17,6 +17,10 @@ function MainPage({ pageName }) {
       }
       case 'User Profile': {
         setPageContent(() => UserProfile);
+        break;
+      }
+      case 'projects': {
+        setPageContent(() => Projects);
         break;
       }
     }
