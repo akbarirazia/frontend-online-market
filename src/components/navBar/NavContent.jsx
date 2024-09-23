@@ -14,6 +14,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { ModalContext } from '../../context/ModalContext';
 import { showServicesAndUsers } from '../../services/RequestService';
 import MobileCategories from '../modals/MobileCategories';
+import { MdMediation } from 'react-icons/md';
 
 function NavContent() {
   const [showCategories, setShowCategories] = useState(false);
@@ -55,6 +56,7 @@ function NavContent() {
     });
   }
 
+  // console.log(currentCategory);
   function handleSelection(e) {
     const category = e.target.id;
     showCategory(category); // Call the function to filter profiles
@@ -79,65 +81,83 @@ function NavContent() {
             </Link>
           </div>
         )}
-        <div className='pt-5'>
-          <div
-            onClick={handleSelection}
-            id='Browse All'
-            className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
-              currentCategory === 'Browse All'
-                ? 'bg-[#e8d7ee] text-[#720d96]'
-                : ''
-            }`}
-          >
-            <div className='rounded-full p-2'>
-              <FaShop size={24} />
-            </div>
-            <span>Browse All</span>
-          </div>
-          {isAuthenticated && (
+        <Link to='/listings'>
+          <div className='pt-5'>
             <div
-              onClick={handleOpenNotifications}
-              className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md relative`}
+              onClick={handleSelection}
+              id='Browse All'
+              className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
+                currentCategory === 'Browse All'
+                  ? 'bg-[#e8d7ee] text-[#720d96]'
+                  : ''
+              }`}
             >
-              <div className='rounded-full p-2 w-fit'>
-                <IoNotifications size={24} />
-                {unreadNotificationsCount > 0 && (
-                  <span className='absolute top-0 right-0 flex items-center justify-center h-5 w-5 rounded-full bg-red-600 text-white text-xs font-bold ring-2 ring-white shadow-sm shadow-black'>
-                    {unreadNotificationsCount}
-                  </span>
-                )}
+              <div className='rounded-full p-2'>
+                <FaShop size={24} />
               </div>
-              <span>Notifications</span>
+              <span>Browse Service Providers</span>
             </div>
-          )}
-          <hr className='my-3' />
-          <h1 className='font-semibold text-lg'>Categories</h1>
-          <div className='py-3'>
-            {services.map((service) => {
-              const IconComponent = Icons.find(
-                (icon) => icon.category === service.title
-              )?.Icon;
-
-              return (
-                <div
-                  key={service.id}
-                  id={service.title}
-                  onClick={handleSelection}
-                  className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
-                    currentCategory === service.title
-                      ? 'bg-[#e8d7ee] text-[#720d96]'
-                      : ''
-                  }`}
-                >
-                  <div className='rounded-full p-2'>
-                    {IconComponent && <IconComponent size={24} />}
-                  </div>
-                  <span id={service.title}>{service.title}</span>
+            <Link to='/media'>
+              <div
+                onClick={handleSelection}
+                id='Media'
+                className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
+                  currentCategory === 'Media'
+                    ? 'bg-[#e8d7ee] text-[#720d96]'
+                    : ''
+                }`}
+              >
+                <div className='rounded-full p-2'>
+                  <MdMediation size={24} />
                 </div>
-              );
-            })}
+                <span>Media </span>
+              </div>
+            </Link>
+            {isAuthenticated && (
+              <div
+                onClick={handleOpenNotifications}
+                className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md relative`}
+              >
+                <div className='rounded-full p-2 w-fit'>
+                  <IoNotifications size={24} />
+                  {unreadNotificationsCount > 0 && (
+                    <span className='absolute top-0 right-0 flex items-center justify-center h-5 w-5 rounded-full bg-red-600 text-white text-xs font-bold ring-2 ring-white shadow-sm shadow-black'>
+                      {unreadNotificationsCount}
+                    </span>
+                  )}
+                </div>
+                <span>Notifications</span>
+              </div>
+            )}
+            <hr className='my-3' />
+            <h1 className='font-semibold text-lg'>Categories</h1>
+            <div className='py-3'>
+              {services.map((service) => {
+                const IconComponent = Icons.find(
+                  (icon) => icon.category === service.title
+                )?.Icon;
+
+                return (
+                  <div
+                    key={service.id}
+                    id={service.title}
+                    onClick={handleSelection}
+                    className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
+                      currentCategory === service.title
+                        ? 'bg-[#e8d7ee] text-[#720d96]'
+                        : ''
+                    }`}
+                  >
+                    <div className='rounded-full p-2'>
+                      {IconComponent && <IconComponent size={24} />}
+                    </div>
+                    <span id={service.title}>{service.title}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
       {/* Mobile screen */}
       <div className='lg:hidden'>
@@ -150,9 +170,9 @@ function NavContent() {
                 className='cursor-pointer w-8 sm:w-10'
               />
             </Link>
-            <p className='p-2 sm:py-2 sm:px-3 rounded-3xl bg-[#e4e6eb]'>
+            {/* <p className='p-2 sm:py-2 sm:px-3 rounded-3xl bg-[#e4e6eb]'>
               Inbox
-            </p>
+            </p> */}
             <Link
               to={'/create'}
               className='p-2 sm:py-2 sm:px-3 rounded-3xl bg-[#e4e6eb]'

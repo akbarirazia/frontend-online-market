@@ -17,14 +17,20 @@ function UserProfile() {
     about: userData?.about || '',
   });
 
-  function handleChange(e) {
-    const { name, value, files } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: files ? files[0] : value,
+  // function handleChange(e) {
+  //   const { name, value, files } = e.target;
+  //   setFormData((prevState) => ({
+  //     ...prevState,
+  //     [name]: files ? files[0] : value,
+  //   }));
+  // }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value, // Update the specific field in the form data
     }));
-  }
-
+  };
   const saveChanges = async () => {
     console.log(formData);
 
@@ -40,6 +46,7 @@ function UserProfile() {
         updatedData.append('profilePicture', formData.profilePicture);
       }
       updatedData.append('about', formData.about);
+      updatedData.append('rate', formData.rate);
 
       // Update the profile using the API call
       const response = await updateProfile(userData.id, updatedData);

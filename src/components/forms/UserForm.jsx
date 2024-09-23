@@ -19,27 +19,54 @@ function UserForm({ formData, handleChange, saveChanges }) {
     }
   };
 
+  // const handleSave = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     // Prepare FormData to send
+  //     const updatedData = new FormData();
+
+  //     // Append form fields to FormData
+  //     updatedData.append('name', formData.name);
+  //     updatedData.append('headline', formData.headline);
+  //     updatedData.append('bio', formData.bio);
+  //     updatedData.append('rate', formData.rate);
+
+  //     // Append file if available
+  //     if (formData.profilePicture instanceof File) {
+  //       updatedData.append('profilePicture', formData.profilePicture);
+  //     }
+  //     console.log(updatedData);
+
+  //     // Call the updateProfile function with the updatedData
+  //     await updateProfile(formData.id, updatedData); // Assuming updateProfile accepts FormData directly
+  //     toast.success('Profile updated successfully');
+  //     saveChanges();
+  //   } catch (error) {
+  //     toast.error('Failed to update profile');
+  //     console.error('Error updating profile:', error);
+  //   }
+  // };
+
   const handleSave = async (e) => {
     e.preventDefault();
 
     try {
-      // Prepare FormData to send
-      const updatedData = new FormData();
+      // Log formData to inspect the current values
+      console.log('formData before sending:', formData);
 
-      // Append form fields to FormData
+      const updatedData = new FormData();
       updatedData.append('name', formData.name);
       updatedData.append('headline', formData.headline);
       updatedData.append('bio', formData.bio);
       updatedData.append('rate', formData.rate);
+      console.log('sending', formData.rate);
 
-      // Append file if available
       if (formData.profilePicture instanceof File) {
         updatedData.append('profilePicture', formData.profilePicture);
       }
-      console.log(updatedData);
 
-      // Call the updateProfile function with the updatedData
-      await updateProfile(formData.id, updatedData); // Assuming updateProfile accepts FormData directly
+      await updateProfile(formData.id, updatedData);
       toast.success('Profile updated successfully');
       saveChanges();
     } catch (error) {
@@ -117,13 +144,13 @@ function UserForm({ formData, handleChange, saveChanges }) {
           className='sm:w-[40%] p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-[#720D96] hover:border-[#720D96] mt-2 mb-5'
         />
         <FormInput
-          inputLabel='Rate'
+          inputLabel='rate'
           labelFor='rate'
           inputType='number'
           inputId='rate'
           inputName='rate'
           placeholderText={formData.rate}
-          ariaLabelName='Rate'
+          ariaLabelName='rate'
           onChange={handleChange}
           value={formData.rate}
           className='sm:w-[40%] p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-[#720D96] hover:border-[#720D96] mt-2 mb-5'

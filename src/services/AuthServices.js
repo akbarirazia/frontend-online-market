@@ -10,6 +10,7 @@ class UserAuthentication {
       const response = await axios.post(`${this.baseUrl}/register`, userData, {
         headers: {
           'Content-Type': 'application/json',
+          
         },
       })
       return response.data

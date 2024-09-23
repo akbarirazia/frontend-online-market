@@ -25,6 +25,8 @@ function RequestServiceModal({ onClose, id }) {
       try {
         const data = await showServices();
         setServices(data);
+        console.log(data);
+
         if (data.length > 0) {
           setSelectedServiceId(data[0].id); // Set default selected service
         }

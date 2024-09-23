@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import UserProfile from './pages/UserProfile';
+import Media from './pages/Media';
 const SignUp = lazy(() => import('./pages/authPages/SignUp'));
 const SignIn = lazy(() => import('./pages/authPages/SignIn'));
 const ForgotPassword = lazy(() => import('./pages/authPages/ForgotPassword'));
@@ -39,6 +40,7 @@ export function PageRoutes() {
           <Route exact path='/forgotpassword' element={<ForgotPassword />} />
           <Route exact path='/listings' element={<Listings />} />
           <Route exact path='/changepassword' element={<ChangePassword />} />
+          <Route exact path='/media' element={<Media />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
