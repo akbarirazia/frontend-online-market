@@ -98,7 +98,7 @@ function NavContent() {
               </div>
               <span>Browse All</span>
             </div>
-            <Link to='/media'>
+            <Link to='/listing/media'>
               <div
                 onClick={handleSelection}
                 id='Media'
@@ -108,6 +108,7 @@ function NavContent() {
                     : ''
                 }`}
               >
+                <Link to='/support' className='flex items-center'></Link>
                 <div className='rounded-full p-2'>
                   <MdMediation size={24} />
                 </div>
@@ -130,51 +131,54 @@ function NavContent() {
                   </div>
                   <span>Notifications</span>
                 </div>
-                <Link to='/support'>
-                  <div
-                    onClick={handleSelection}
-                    id='support'
-                    className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
-                      currentCategory === 'support'
-                        ? 'bg-[#e8d7ee] text-[#720d96]'
-                        : ''
-                    }`}
-                  >
+
+                <div
+                  onClick={handleSelection}
+                  id='support'
+                  className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
+                    currentCategory === 'support'
+                      ? 'bg-[#e8d7ee] text-[#720d96]'
+                      : ''
+                  }`}
+                >
+                  <Link to='/support' className='flex items-center'>
                     <div className='rounded-full p-2'>
                       <MdSupportAgent size={24} />
                     </div>
                     <span>Support </span>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               </>
             )}
             <hr className='my-3' />
             <h1 className='font-semibold text-lg'>Categories</h1>
-            <div className='py-3'>
-              {services.map((service) => {
-                const IconComponent = Icons.find(
-                  (icon) => icon.category === service.title
-                )?.Icon;
+            {isAuthenticated && (
+              <div className='py-3'>
+                {services.map((service) => {
+                  const IconComponent = Icons.find(
+                    (icon) => icon.category === service.title
+                  )?.Icon;
 
-                return (
-                  <div
-                    key={service.id}
-                    id={service.title}
-                    onClick={handleSelection}
-                    className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
-                      currentCategory === service.title
-                        ? 'bg-[#e8d7ee] text-[#720d96]'
-                        : ''
-                    }`}
-                  >
-                    <div className='rounded-full p-2'>
-                      {IconComponent && <IconComponent size={24} />}
+                  return (
+                    <div
+                      key={service.id}
+                      id={service.title}
+                      onClick={handleSelection}
+                      className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
+                        currentCategory === service.title
+                          ? 'bg-[#e8d7ee] text-[#720d96]'
+                          : ''
+                      }`}
+                    >
+                      <div className='rounded-full p-2'>
+                        {IconComponent && <IconComponent size={24} />}
+                      </div>
+                      <span id={service.title}>{service.title}</span>
                     </div>
-                    <span id={service.title}>{service.title}</span>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </Link>
       </div>

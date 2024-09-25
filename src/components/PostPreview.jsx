@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 
 function PostPreview({ images, formData, activeInput }) {
   const [currentPicture, setCurrentPicture] = useState(null);
-  const { name, price, message } = formData;
+  const { title, link, description } = formData;
   const { userData } = useContext(AuthContext);
 
   useEffect(() => {
@@ -93,40 +93,40 @@ function PostPreview({ images, formData, activeInput }) {
           <div className='mb-5'>
             <div
               className={`text-2xl font-bold mb-2 ${
-                activeInput === 'name'
+                activeInput === 'title'
                   ? 'text-[#720D96]'
-                  : name
+                  : title
                   ? 'text-[#141414]'
                   : 'text-[#888888]'
               }`}
             >
-              {name ? <h1>{name.toUpperCase()}</h1> : <h1>Title</h1>}
+              {title ? <h1>{title.toUpperCase()}</h1> : <h1>Title</h1>}
             </div>
             <div
               className={`text-base font-medium ${
-                activeInput === 'price'
+                activeInput === 'link'
                   ? 'text-[#720D96]'
-                  : price
+                  : link
                   ? 'text-[#141414]'
                   : 'text-[#888888]'
               }`}
             >
-              {price ? <p>{`₦ ${price}`}</p> : <p>Price</p>}
+              {link ? <p>{` ${link}`}</p> : <p>Link</p>}
             </div>
             {/* <p className="text-[#888888] text-xs mb-5">
                             Listed a few seconds ago in Lagos
                         </p> */}
             <div
               className={`${
-                activeInput === 'message'
+                activeInput === 'description'
                   ? 'text-[#720D96]'
-                  : message
+                  : description
                   ? 'text-[#141414]'
                   : 'text-[#888888]'
               }`}
             >
-              {message ? (
-                <p className='text-justify pr-2'>{message}</p>
+              {description ? (
+                <p className='text-justify pr-2'>{description}</p>
               ) : (
                 <p>Description will appear here</p>
               )}
@@ -142,7 +142,8 @@ function PostPreview({ images, formData, activeInput }) {
             </div>
             <div className='flex items-center gap-3 mt-5'>
               <img
-                src={userData.profilePicture}
+                // src={userData.profilePicture}
+                src={image}
                 alt=''
                 className='rounded-full w-12 hover:opacity-90 cursor-pointer'
               />

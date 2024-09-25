@@ -42,7 +42,7 @@ export function PageRoutes() {
           <Route exact path='/forgotpassword' element={<ForgotPassword />} />
           <Route exact path='/listings' element={<Listings />} />
           <Route exact path='/changepassword' element={<ChangePassword />} />
-          <Route exact path='/media' element={<Media />} />
+          <Route exact path='/listing/media' element={<Media />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>

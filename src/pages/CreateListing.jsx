@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 
 import { IoMdArrowBack, IoMdArrowDropdown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
@@ -13,6 +14,8 @@ import { MdLocationPin } from 'react-icons/md';
 // import axios from "axios";
 import ListingService from '../services/Listing';
 import FetchClient from '../ServiceClients/FetchClient';
+import { AuthContext } from '../context/AuthContext';
+import { ProjectService } from '../services/ProjectRoutes';
 
 function CreateListing() {
   const [mouseEnter, setMouseEnter] = React.useState(false);
@@ -21,18 +24,19 @@ function CreateListing() {
   const [activeInput, setActiveInput] = React.useState('');
   const [showCategoryOptions, setShowCategoryOptions] = React.useState(false);
   const [chosenCategory, setChosenCategory] = React.useState('');
+  const { userData } = useContext(AuthContext);
 
   const handleImagesChange = (images) => {
     setImages(images);
   };
 
-  const toBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(',')[1]);
-      reader.onerror = (error) => reject(error);
-    });
+  // const toBase64 = (file) =>
+  //   new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result.split(',')[1]);
+  //     reader.onerror = (error) => reject(error);
+  //   });
 
   function handleChange(e) {
     setActiveInput(e.target.id);
@@ -51,34 +55,47 @@ function CreateListing() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const listingService = new ListingService(FetchClient);
     try {
-      // Converting files to Base64
-      const filesBase64Promises = images.map((fileData) =>
-        toBase64(fileData.file)
-      );
-      const filesBase64 = await Promise.all(filesBase64Promises);
+      const formDataToSend = new FormData(); // Create FormData to send file
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('link', formData.link);
+      formDataToSend.append('user_id', userData.id);
 
-      //updating formData with the chosen category
-      setFormData((prevFormData) => {
-        return {
-          ...prevFormData,
-          category: chosenCategory,
-        };
+      // Append the first image if available
+      if (images.length > 0) {
+        formDataToSend.append('image_url', images[0].file); // Assuming images[0].file contains the image file object
+      }
+
+      // Send the request using FetchClient or axios
+      const response = await ProjectService.createProject(formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Ensure correct headers for file upload
+        },
       });
 
-      // Preparing listingInfo with the first file as string and form data as JSON string
-      const listingInfo = {
-        file: filesBase64[0],
-        listingData: JSON.stringify(formData),
-      };
-      const response = listingService.createListing(listingInfo);
-      alert('Successful');
+      toast.success('Successfully created');
       console.log(response.data);
     } catch (err) {
       console.error(err);
       alert('unsuccessful');
     }
+
+    // const listingService = new ListingService(FetchClient);
+    // try {
+    //   //   // Converting files to Base64
+    //   //   const filesBase64Promises = images.map((fileData) =>
+    //   //     toBase64(fileData.file)
+    //   //   );
+    //   //   const filesBase64 = await Promise.all(filesBase64Promises);
+
+    //   //updating formData with the chosen category
+    //   setFormData((prevFormData) => {
+    //     return {
+    //       ...prevFormData,
+    //       category: chosenCategory,
+    //     };
+    //   });
   }
 
   function handleCategorySelection(e) {
@@ -125,20 +142,20 @@ function CreateListing() {
             <h3>Required</h3>
             <p>Be as descriptive as possible</p>
             <FormInput
-              inputName='name'
-              inputId='name'
-              placeholderText='Name'
-              inputValue={formData.name}
+              inputName='title'
+              inputId='title'
+              placeholderText='Title'
+              inputValue={formData.title}
               // onMouseLeave={() => setActiveInput("")}
               onMouseEnter={(e) => highlightField(e)}
               onChange={(e) => handleChange(e)}
               className='w-full p-4 border-2 my-3 border-[#D0D5DD] bg-white rounded-md shadow-sm transition ease-in-out hover:border-[#720D96] focus:outline-none focus:border-[#720D96] duration-300'
             />
             <FormInput
-              inputName='price'
-              inputId='price'
-              placeholderText='Price'
-              inputValue={formData.price}
+              inputName='link'
+              inputId='link'
+              placeholderText='link'
+              inputValue={formData.link}
               // onMouseLeave={setActiveInput("")}
               onMouseEnter={(e) => highlightField(e)}
               onChange={(e) => handleChange(e)}
@@ -204,14 +221,14 @@ function CreateListing() {
             </div> */}
 
             <textarea
-              name='message'
-              id='message'
+              name='description'
+              id='description'
               cols={50}
               rows={5}
               onMouseEnter={(e) => highlightField(e)}
               onChange={(e) => handleChange(e)}
               className='border-2 border-[#ced0d4] shadow-sm w-full rounded-md resize-none p-2 focus:outline-[#720D96] hover:border-[#720D96] text-sm'
-              value={formData.message}
+              value={formData.description}
               placeholder='Please type your message to the seller'
             ></textarea>
             <div className='flex items-center justify-end gap-5 pt-3'>
@@ -239,6 +256,7 @@ function CreateListing() {
           />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
