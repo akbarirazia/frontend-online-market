@@ -1,8 +1,8 @@
-import axios from 'axios'
+import axios from 'axios';
 
 class UserAuthentication {
   constructor() {
-    this.baseUrl = 'http://localhost:5000/api/auth'
+    this.baseUrl = 'http://localhost:5000/api/auth';
   }
 
   async registerUser(userData) {
@@ -10,13 +10,12 @@ class UserAuthentication {
       const response = await axios.post(`${this.baseUrl}/register`, userData, {
         headers: {
           'Content-Type': 'application/json',
-          
         },
-      })
-      return response.data
+      });
+      return response.data;
     } catch (error) {
-      console.error(error)
-      throw error
+      console.error(error);
+      throw error;
     }
   }
 
@@ -26,11 +25,11 @@ class UserAuthentication {
         headers: {
           'Content-Type': 'application/json',
         },
-      })
-      return response.data
+      });
+      return response.data;
     } catch (error) {
-      console.error(error)
-      throw error
+      console.error(error);
+      throw error;
     }
   }
 
@@ -44,59 +43,59 @@ class UserAuthentication {
             'Content-Type': 'application/json',
           },
         }
-      )
-      return response.data
+      );
+      return response.data;
     } catch (error) {
-      console.error(error)
-      throw error
+      console.error(error);
+      throw error;
     }
   }
 
-  async resetPassword(userEmail) {
-    try {
-      const response = await axios.post(
-        `${this.baseUrl}/reset`,
-        { email: userEmail },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-      return response.data
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
-  }
+  // async resetPassword(userEmail) {
+  //   try {
+  //     const response = await axios.post(
+  //       `${this.baseUrl}/reset`,
+  //       { email: userEmail },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     )
+  //     return response.data
+  //   } catch (error) {
+  //     console.error(error)
+  //     throw error
+  //   }
+  // }
 
-  async changePassword(newAuthDetails) {
-    try {
-      const response = await axios.post(
-        `${this.baseUrl}/changepassword`,
-        newAuthDetails,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-      return response.data
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
-  }
+  // async changePassword(newAuthDetails) {
+  //   try {
+  //     const response = await axios.post(
+  //       `${this.baseUrl}/changepassword`,
+  //       newAuthDetails,
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     )
+  //     return response.data
+  //   } catch (error) {
+  //     console.error(error)
+  //     throw error
+  //   }
+  // }
 
   async getCurrentUserName() {
     try {
-      const response = await axios.get(`${this.baseUrl}/currentusername`)
-      return response.data
+      const response = await axios.get(`${this.baseUrl}/currentusername`);
+      return response.data;
     } catch (error) {
-      console.error(error)
-      throw error
+      console.error(error);
+      throw error;
     }
   }
 }
 
-export default UserAuthentication
+export default UserAuthentication;
