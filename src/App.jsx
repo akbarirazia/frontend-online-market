@@ -1,3 +1,4 @@
+import { ToastContainer } from 'react-toastify';
 import AuthProvider from './context/AuthContext';
 import { PageRoutes } from './Routes';
 

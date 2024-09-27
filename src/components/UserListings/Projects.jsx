@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'; // Added useState
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import ProjectCard from '../ProjectCard';
 import { ProjectService } from '../../services/ProjectRoutes'; // Assuming you have a service to fetch projects
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import Button from '../reusable/Button';
 import { Link } from 'react-router-dom';
+import DeleteListingsModal from '../modals/DeleteListingModal';
 
 function Projects() {
   const { userData } = useContext(AuthContext); // Get user data from AuthContext
@@ -12,6 +13,9 @@ function Projects() {
   const [currentProject, setCurrentProject] = useState(null); // Optional: if you want to set a currently selected project
   const [expandedImage, setExpandedImage] = useState(null); // Optional: for image zoom functionality
   const [zoom, setZoom] = useState(1); // Optional: for handling zoom on image
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [projectToDelete, setProjectToDelete] = useState(null); // State to track which project is being deleted
+  const [isDeleteInProgress, setIsDeleteInProgress] = useState(false); // State to track if delete is in progress
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -32,13 +36,30 @@ function Projects() {
       fetchProjects();
     }
   }, [userData.id]);
-  const deleteProject = async (projectId) => {
+
+  const handleDeleteClick = (project) => {
+    setProjectToDelete(project);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setProjectToDelete(null);
+  };
+
+  const deleteProject = async () => {
+    if (!projectToDelete) return;
+    setIsDeleteInProgress(true);
     try {
-      const response = await ProjectService.deleteProject(projectId);
-      setProjects(projects.filter((p) => p.id !== projectId));
+      const response = await ProjectService.deleteProject(projectToDelete.id);
+      setProjects(projects.filter((p) => p.id !== projectToDelete.id));
       toast.info(response);
+      closeModal();
     } catch (error) {
       console.error('Error deleting project:', error);
+    } finally {
+      setIsDeleteInProgress(false);
+      toast.success('Project deleted successfully');
     }
   };
 
@@ -59,16 +80,23 @@ function Projects() {
             <ProjectCard
               key={project.id}
               project={project}
-              //   image_url={project.image_url}
-              // You can pass relevant functions like edit/delete when implemented
               onEdit={() => console.log('Edit project:', project.id)}
-              onDelete={() => deleteProject(project.id)}
+              onDelete={() => handleDeleteClick(project)} // Show the delete modal
             />
           ))}
         </div>
       ) : (
         <p>You have no projects yet.</p>
       )}
+
+      {isModalOpen && (
+        <DeleteListingsModal
+          onClose={closeModal}
+          isDeleteInProgress={isDeleteInProgress}
+          deleteListing={deleteProject}
+        />
+      )}
+      <ToastContainer />
     </section>
   );
 }

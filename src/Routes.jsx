@@ -10,6 +10,7 @@ import UserProfile from './pages/UserProfile';
 import Media from './pages/Media';
 import Projects from './components/UserListings/Projects';
 import ProjectsLayout from './pages/ProjectsLayout';
+import SupportLayout from './pages/SupportLayout';
 const SignUp = lazy(() => import('./pages/authPages/SignUp'));
 const SignIn = lazy(() => import('./pages/authPages/SignIn'));
 const ForgotPassword = lazy(() => import('./pages/authPages/ForgotPassword'));
@@ -47,6 +48,7 @@ export function PageRoutes() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
             <Route exact path='/create' element={<CreateListing />} />
+            <Route exact path='/support' element={<SupportLayout />} />
           </Route>
           {/* <Route element={<ProtectedRoutes />}>
                     <Route exact path="/signup" element={<SignUp />} />

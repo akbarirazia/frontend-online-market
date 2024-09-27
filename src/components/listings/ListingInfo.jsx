@@ -8,6 +8,7 @@ import { ModalContext } from '../../context/ModalContext';
 import imagePlaceholder from '../../assets/image1.png'; // Placeholder if image is unavailable
 import { getSingleProfile } from '../../services/AllProfiles';
 import RequestServiceModal from '../modals/RequestService';
+import { toast, ToastContainer } from 'react-toastify';
 
 function ListingInfo({ listingId }) {
   const { isAuthenticated } = useContext(AuthContext);
@@ -145,6 +146,7 @@ function ListingInfo({ listingId }) {
             <IoIosShareAlt size={20} />
           </Button>
         </div>
+        <ToastContainer />
       </div>
     </div>
   );

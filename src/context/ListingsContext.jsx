@@ -169,6 +169,7 @@ export const ListingsProvider = ({ children }) => {
         )
         .flatMap((service) => service.users); // Get users for the selected category
       setFilteredProfiles(filteredUsers);
+      console.log(filteredProfiles);
     }
   };
   const listings = [];

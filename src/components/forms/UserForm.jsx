@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { updateProfile } from '../../services/AllProfiles'; // Adjust the import path as needed
 import { FaCamera } from 'react-icons/fa';
 import FormInput from '../FormInput';
@@ -176,6 +176,7 @@ function UserForm({ formData, handleChange, saveChanges }) {
           Save
         </button>
       </div>
+      <ToastContainer />
     </form>
   );
 }

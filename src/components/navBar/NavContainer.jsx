@@ -10,7 +10,8 @@ function NavContainer({ className, pageName }) {
       <div className='nav-container lg:w-1/4 2xl:w-1/5 lg:bg-white lg:border p-2 md:p-5 lg:fixed top-0 left-0 lg:h-screen md:overflow-y-auto'>
         {pageName === 'Home' ||
         pageName === 'Listings' ||
-        pageName === 'media' ? (
+        pageName === 'media' ||
+        pageName === 'support' ? (
           <NavContent />
         ) : (
           <UserListingsNavBar pageName={pageName} />

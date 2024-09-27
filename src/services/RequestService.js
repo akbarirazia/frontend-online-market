@@ -3,12 +3,18 @@ import axios from 'axios';
 const API_BASE_URL = 'http://localhost:5000/api'; // Replace with your actual API URL
 
 // Function to send a service request
-export const sendServiceRequest = async (userId, serviceId, message) => {
+export const sendServiceRequest = async (
+  userId,
+  serviceId,
+  message,
+  providerId
+) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/servicerequest`, {
       userId,
       serviceId,
       message,
+      providerId,
     });
     return response.data; // Returns the server response
   } catch (error) {
