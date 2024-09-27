@@ -7,6 +7,7 @@ import { IoMdClose } from 'react-icons/io';
 import { IoNotifications } from 'react-icons/io5';
 import { Icons } from '../../data/listings'; // Adjust the import path
 import { MdSupportAgent } from 'react-icons/md';
+import Appicon from '../../assets/app-icon.png';
 
 import Button from '../reusable/Button';
 import profile from '../../assets/profile.svg';
@@ -184,6 +185,16 @@ function NavContent() {
               </div>
             </Link>
           )}
+        </div>
+        <div className='flex justify-center'>
+          <a href='http://akbarirazia.vercel.app'>
+            <img src={Appicon} alt='' className='w-14' />
+          </a>
+        </div>
+        <div className='flex justify-center'>
+          <small className=' text-[#720d96] text-center mt-4'>
+            Beta version – expect some bugs. Thank you for your patience!
+          </small>
         </div>
       </div>
       {/* Mobile screen */}

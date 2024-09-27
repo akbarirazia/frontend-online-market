@@ -1,23 +1,23 @@
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
-import { MdLocationPin } from 'react-icons/md'
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { MdLocationPin } from 'react-icons/md';
 
-import profile from '../../assets/profile.svg'
-import AppIcon from '../../assets/app-icon.png'
-import SearchInput from '../SearchInput'
-import Button from '../reusable/Button'
-import UserIconOptions from '../UserIconOptions'
-import { AuthContext } from '../../context/AuthContext'
-import { ModalContext } from '../../context/ModalContext'
+import profile from '../../assets/profile.svg';
+import AppIcon from '../../assets/app-icon.png';
+import SearchInput from '../SearchInput';
+import Button from '../reusable/Button';
+import UserIconOptions from '../UserIconOptions';
+import { AuthContext } from '../../context/AuthContext';
+import { ModalContext } from '../../context/ModalContext';
 
 function AppHeader() {
-  const [showUserOptions, setShowUserOptions] = React.useState(false)
-  const [isSearchInProgress, setIsSearchInProgress] = React.useState(false)
-  const { isAuthenticated, userData } = useContext(AuthContext)
-  const { handleLocationToggle } = useContext(ModalContext)
+  const [showUserOptions, setShowUserOptions] = React.useState(false);
+  const [isSearchInProgress, setIsSearchInProgress] = React.useState(false);
+  const { isAuthenticated, userData } = useContext(AuthContext);
+  const { handleLocationToggle } = useContext(ModalContext);
 
   function toggleFixed() {
-    document.querySelector('.app-header').classList.add('active')
+    document.querySelector('.app-header').classList.add('active');
   }
 
   return (
@@ -29,7 +29,6 @@ function AppHeader() {
       >
         <Link to={`${isAuthenticated ? '/listings' : '/'}`}>
           <div className='flex items-center gap-1'>
-            <img src={AppIcon} alt='' className='w-10' />
             {!isSearchInProgress && (
               <div>
                 <h1 className='text-lg md:text-xl font-bold text-[#720D96]'>
@@ -50,7 +49,8 @@ function AppHeader() {
           >
             <MdLocationPin size={20} />
             <span className='hover:underline text-[#720D96]'>
-              {isAuthenticated && userData.name}
+              {isAuthenticated && 'Kabul, Afghanistan  '} |
+              {isAuthenticated && ' ' + userData.name}
             </span>
           </div>
           <div className='hidden lg:flex items-center gap-3'>
@@ -60,8 +60,8 @@ function AppHeader() {
                   src={profile}
                   alt=''
                   onClick={(e) => {
-                    e.stopPropagation()
-                    setShowUserOptions((prevState) => !prevState)
+                    e.stopPropagation();
+                    setShowUserOptions((prevState) => !prevState);
                   }}
                   className='cursor-pointer'
                 />
@@ -79,7 +79,7 @@ function AppHeader() {
 
       {showUserOptions && <UserIconOptions />}
     </div>
-  )
+  );
 }
 
-export default AppHeader
+export default AppHeader;
