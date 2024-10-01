@@ -11,6 +11,7 @@ import Media from './pages/Media';
 import Projects from './components/UserListings/Projects';
 import ProjectsLayout from './pages/ProjectsLayout';
 import SupportLayout from './pages/SupportLayout';
+import Edit from './pages/Edit';
 const SignUp = lazy(() => import('./pages/authPages/SignUp'));
 const SignIn = lazy(() => import('./pages/authPages/SignIn'));
 const ForgotPassword = lazy(() => import('./pages/authPages/ForgotPassword'));
@@ -30,7 +31,7 @@ export function PageRoutes() {
       <Suspense fallback={''}>
         <Routes>
           {/* unauthorized route  */}
-          <Route exact path='/' element={<Home />} />
+          <Route exact path='/' element={<Listings />} />
           <Route exact path='/signup' element={<SignUp />} />
           <Route exact path='/signin' element={<SignIn />} />
           <Route exact path='/listing/:id' element={<SingleListing />} />
@@ -49,6 +50,7 @@ export function PageRoutes() {
           <Route element={<ProtectedRoutes />}>
             <Route exact path='/create' element={<CreateListing />} />
             <Route exact path='/support' element={<SupportLayout />} />
+            <Route path='/edit/:projectId' element={<Edit />} />
           </Route>
           {/* <Route element={<ProtectedRoutes />}>
                     <Route exact path="/signup" element={<SignUp />} />

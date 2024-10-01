@@ -36,6 +36,8 @@ export const showServices = async () => {
 export const showServicesAndUsers = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/services/all`);
+    console.log(response.data);
+
     return response.data; // Returns the server response
   } catch (error) {
     console.error('Error sending services request:', error);

@@ -1,115 +1,121 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
-
-import { IoMdArrowBack, IoMdArrowDropdown } from 'react-icons/io';
-import { Link } from 'react-router-dom';
+import { IoMdArrowBack } from 'react-icons/io';
+import { Link, useNavigate, useParams } from 'react-router-dom'; // useParams to get project ID
 import profile from '../assets/profile.svg';
 import AddPhotos from '../components/AddPhotos';
-// import ListingGallery from "../components/listings/ListingGallery";
 import PostPreview from '../components/PostPreview';
 import FormInput from '../components/FormInput';
 import Button from '../components/reusable/Button';
-import { listingCategories } from '../data/listings';
-import { MdLocationPin } from 'react-icons/md';
-// import axios from "axios";
-import ListingService from '../services/Listing';
-import FetchClient from '../ServiceClients/FetchClient';
 import { AuthContext } from '../context/AuthContext';
 import { ProjectService } from '../services/ProjectRoutes';
 
-function CreateListing() {
+function CreateListing({ Data }) {
   const [mouseEnter, setMouseEnter] = React.useState(false);
   const [images, setImages] = React.useState([]); // Separate state for images
-  const [formData, setFormData] = React.useState({});
+  const [formData, setFormData] = React.useState({
+    title: Data?.title || '',
+    description: Data?.description || '',
+    link: Data?.link || '',
+    image_url: Data?.image_url || '',
+  });
   const [activeInput, setActiveInput] = React.useState('');
-  const [showCategoryOptions, setShowCategoryOptions] = React.useState(false);
-  const [chosenCategory, setChosenCategory] = React.useState('');
   const { userData } = useContext(AuthContext);
+  const { projectId } = useParams();
+  const navigate = useNavigate();
+  useEffect(() => {
+    // Fetch the existing project data when editing
+    if (projectId) {
+      fetchProjectData(projectId);
+    }
+  }, [projectId]);
+
+  const fetchProjectData = async (projectId) => {
+    try {
+      const response = await ProjectService.getProjectById(projectId);
+      const projectData = response.data;
+
+      // Set formData with the project data
+      setFormData({
+        title: projectData.title || '',
+        description: projectData.description || '',
+        link: projectData.link || '',
+        image_url: projectData.image_url || '',
+      });
+
+      // Set images if there is an existing image
+      if (projectData.image_url) {
+        setImages([{ file: projectData.image_url }]);
+      }
+    } catch (err) {
+      console.error('Error fetching project data:', err);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   const handleImagesChange = (images) => {
     setImages(images);
   };
 
-  // const toBase64 = (file) =>
-  //   new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result.split(',')[1]);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-
-  function handleChange(e) {
-    setActiveInput(e.target.id);
-    const { name, value } = e.target;
-    setFormData((prevState) => {
-      return {
-        ...prevState,
-        [name]: value,
-      };
-    });
-  }
-
-  function highlightField(e) {
-    setActiveInput(e.target.id);
-  }
-
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const formDataToSend = new FormData(); // Create FormData to send file
+      const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('link', formData.link);
       formDataToSend.append('user_id', userData.id);
 
-      // Append the first image if available
       if (images.length > 0) {
-        formDataToSend.append('image_url', images[0].file); // Assuming images[0].file contains the image file object
+        formDataToSend.append('image_url', images[0].file); // Assuming images[0].file contains the image file
       }
 
-      // Send the request using FetchClient or axios
-      const response = await ProjectService.createProject(formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Ensure correct headers for file upload
-        },
-      });
+      let response;
+      if (projectId) {
+        // If editing, update the project
+        response = await ProjectService.updateProject(
+          projectId,
+          formDataToSend,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+        toast.success('Project successfully updated');
+        setTimeout(() => {
+          navigate('/projects');
+        }, [1500]);
+      } else {
+        // If creating a new project
+        response = await ProjectService.createProject(formDataToSend, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        toast.success('Project successfully created');
+      }
 
-      toast.success('Successfully created');
       console.log(response.data);
     } catch (err) {
-      console.error(err);
-      alert('unsuccessful');
+      console.error('Error submitting form:', err);
+      toast.error('Submission failed');
     }
-
-    // const listingService = new ListingService(FetchClient);
-    // try {
-    //   //   // Converting files to Base64
-    //   //   const filesBase64Promises = images.map((fileData) =>
-    //   //     toBase64(fileData.file)
-    //   //   );
-    //   //   const filesBase64 = await Promise.all(filesBase64Promises);
-
-    //   //updating formData with the chosen category
-    //   setFormData((prevFormData) => {
-    //     return {
-    //       ...prevFormData,
-    //       category: chosenCategory,
-    //     };
-    //   });
-  }
-
-  function handleCategorySelection(e) {
-    const option = e.target.id;
-    setChosenCategory(option);
-    setShowCategoryOptions(false);
-  }
+  };
 
   return (
     <div className='flex h-screen text-[#141414]'>
       <div className='w-full lg:w-[30%] 2xl:w-[25%] h-screen overflow-y-scroll'>
         <div className='flex items-center justify-between p-3 border-b'>
           <Link
-            to={'/listings'}
+            to={'/userprofile'}
             className='flex items-center gap-2 cursor-pointer'
             onMouseEnter={() => setMouseEnter(true)}
             onMouseLeave={() => setMouseEnter(false)}
@@ -128,11 +134,11 @@ function CreateListing() {
         </div>
         <hr />
         <div className='p-4'>
-          <form className=''>
-            <h2 className='font-bold text-2xl mb-3'>Create your post</h2>
+          <form className='' onSubmit={handleSubmit}>
+            <h2 className='font-bold text-2xl mb-3'>
+              {projectId ? 'Edit your project' : 'Create your post'}
+            </h2>
             <div>
-              {/* <img src={profile} alt="" /> */}
-              <p>Post to Media · Public</p>
               <p>
                 <span>{`Photos · ${images.length}/1 -`}</span> You can add your
                 photo here
@@ -146,114 +152,41 @@ function CreateListing() {
               inputId='title'
               placeholderText='Title'
               inputValue={formData.title}
-              // onMouseLeave={() => setActiveInput("")}
-              onMouseEnter={(e) => highlightField(e)}
-              onChange={(e) => handleChange(e)}
+              onChange={handleChange}
               className='w-full p-4 border-2 my-3 border-[#D0D5DD] bg-white rounded-md shadow-sm transition ease-in-out hover:border-[#720D96] focus:outline-none focus:border-[#720D96] duration-300'
             />
             <FormInput
               inputName='link'
               inputId='link'
-              placeholderText='link'
+              placeholderText='Link'
               inputValue={formData.link}
-              // onMouseLeave={setActiveInput("")}
-              onMouseEnter={(e) => highlightField(e)}
-              onChange={(e) => handleChange(e)}
+              onChange={handleChange}
               className='w-full p-4 border-2 mb-3 border-[#D0D5DD] bg-white rounded-md shadow-sm transition ease-in-out hover:border-[#720D96] focus:outline-none focus:border-[#720D96] duration-300'
             />
-            {/* <div className='relative'>
-              <div
-                onClick={() =>
-                  setShowCategoryOptions((prevState) => !prevState)
-                }
-                className='cursor-pointer flex items-center justify-between w-full p-4 border-2 mb-3 border-[#D0D5DD] bg-white rounded-md shadow-sm transition ease-in-out hover:border-[#720D96] focus:outline-none focus:border-[#720D96] duration-300'
-              >
-                <span
-                  className={`${
-                    chosenCategory ? 'text-[#141414]' : 'text-[#ccc]'
-                  }`}
-                >
-                  {chosenCategory ? chosenCategory : 'Category'}
-                </span>
-                <IoMdArrowDropdown size={20} />
-              </div>
-              {showCategoryOptions && (
-                <div className='absolute w-full top-full bottom-0 left-0 py-3 h-72 overflow-auto border rounded-md bg-white'>
-                  {listingCategories.map(({ id, Icon, category }) => {
-                    return (
-                      <div
-                        key={id}
-                        id={category}
-                        onClick={handleCategorySelection}
-                        className='border-b-2 flex items-center gap-2 mb-2 py-2 pl-3 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md'
-                      >
-                        <div
-                          id={category}
-                          className='bg-[#e4e6eb] rounded-full p-2'
-                        >
-                          <Icon size={20} />
-                        </div>
-                        <span id={category}>{category}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-            {/* <div className='border-2 rounded-md mb-3 w-full my-3 border-[#D0D5DD] bg-white shadow-sm transition ease-in-out hover:border-[#720D96] focus:outline-none focus:border-[#720D96] duration-300'>
-              {/* <div className='flex items-center gap-2'>
-                {/* <div className='pl-4'>
-                  <MdLocationPin size={20} />
-                </div> */}
-            {/* <FormInput
-                                    inputGroupClassNames="flex flex-col py-3 text-[#141414]"
-                                    inputLabel="Location"
-                                    labelFor="location"
-                                    labelClasses="mb-0 text-sm text-[rgba(20,20,20, .8)]"
-                                    inputName="location"
-                                    inputId="location"
-                                    inputValue={formData.location}
-                                    onChange={(e) => handleChange(e)}
-                                    className="focus:outline-none text-base"
-                                    placeholderText="Enter a town or city"
-                                /> 
-              </div> 
-            </div> */}
-
             <textarea
               name='description'
               id='description'
               cols={50}
               rows={5}
-              onMouseEnter={(e) => highlightField(e)}
-              onChange={(e) => handleChange(e)}
+              onChange={handleChange}
               className='border-2 border-[#ced0d4] shadow-sm w-full rounded-md resize-none p-2 focus:outline-[#720D96] hover:border-[#720D96] text-sm'
               value={formData.description}
               placeholder='Please type your message to the seller'
             ></textarea>
             <div className='flex items-center justify-end gap-5 pt-3'>
               <Button
-                onClick={handleSubmit}
+                type='submit'
                 className='border border-[#720D96] bg-white p-4 rounded-md font-medium transition ease-in-out hover:bg-[#720D96] hover:text-white duration-300'
               >
-                Create
+                {projectId ? 'Update Project' : 'Create Project'}
               </Button>
             </div>
           </form>
         </div>
       </div>
-      <div className=' hidden w-[70%] 2xl:w-[75%] h-screen lg:flex items-center justify-center bg-[#f0f2f5]'>
-        {/* <div className="flex items-center">
-                    {images.map((image) => {
-                        return <img className="w-28" key={image} src={image.id} alt="" />;
-                    })}
-                </div> */}
+      <div className='hidden w-[70%] 2xl:w-[75%] h-screen lg:flex items-center justify-center bg-[#f0f2f5]'>
         <div className='md:w-[95%] 2xl:w-[70%] mx-auto'>
-          <PostPreview
-            images={images}
-            formData={formData}
-            activeInput={activeInput}
-          />
+          <PostPreview images={images ? images : ''} formData={formData} />
         </div>
       </div>
       <ToastContainer />

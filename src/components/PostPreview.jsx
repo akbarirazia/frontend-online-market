@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect, useContext } from 'react';
-// import background from "../assets/background.png";
 import image from '../assets/image1.png';
 import { AuthContext } from '../context/AuthContext';
 
@@ -10,7 +8,7 @@ function PostPreview({ images, formData, activeInput }) {
   const { userData } = useContext(AuthContext);
 
   useEffect(() => {
-    if (images.length > 0) {
+    if (images?.length > 0) {
       const firstImageUrl = URL.createObjectURL(images[0].file);
       setCurrentPicture(firstImageUrl);
 
@@ -19,37 +17,11 @@ function PostPreview({ images, formData, activeInput }) {
     }
   }, [images]);
 
-  // const handleSelection = (file) => {
-  //     if (file instanceof File) {
-  //         const objectUrl = URL.createObjectURL(file);
-  //         setCurrentPicture(objectUrl);
-
-  //         // Clean up the object URL when the selection changes
-  //         return () => URL.revokeObjectURL(objectUrl);
-  //     }
-  // };
-
   return (
     <div className='border bg-white p-5 rounded-md'>
       <p className='mb-3'>Preview</p>
-      {/* <div className="flex h-[520px] divide-x-2 border rounded-md">
-                    <div className="text-lg flex flex-col items-center justify-center w-[60%] bg-[#f0f2f5] rounded-md">
-                        <h1 className="font-bold text-2xl">
-                            Your listing preview
-                        </h1>
-                        <p className="w-[80%] mx-auto">
-                            As you create your listing, you can preview how it
-                            would appear to others
-                        </p>
-                    </div>
-                    <div className="w-[40%] p-5">
-                        <h1>Title</h1>
-                        <p>Price</p>
-                        <p>Listed a few seconds ago in Lagos</p>
-                    </div>
-                </div> */}
       <div className='flex h-[520px] border rounded-md'>
-        {images.length === 0 ? (
+        {images?.length === 0 ? (
           <div className='text-lg flex flex-col items-center justify-center w-[60%] bg-[#f0f2f5] rounded-md'>
             <h1 className='font-bold text-2xl'>Your listing preview</h1>
             <p className='w-[80%] mx-auto'>
@@ -63,32 +35,12 @@ function PostPreview({ images, formData, activeInput }) {
               <img
                 src={currentPicture}
                 alt='Current Preview'
-                className=' absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full min-h-[300px] max-h-80 mx-auto rounded-md object-scale-down'
+                className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full min-h-[300px] max-h-80 mx-auto rounded-md object-scale-down'
               />
             )}
-            {/* <div className="grid grid-cols-3 place-items-center gap-4 md:gap-8 w-full p-3">
-                            {images.map((fileData, index) => {
-                                const objectUrl = URL.createObjectURL(
-                                    fileData.file
-                                );
-                                return (
-                                    <img
-                                        key={index}
-                                        src={objectUrl}
-                                        alt={`Preview ${index}`}
-                                        className="rounded-md w-full h-full max-h-[150px] cursor-pointer "
-                                        onClick={() =>
-                                            handleSelection(fileData.file)
-                                        }
-                                        onLoad={() =>
-                                            URL.revokeObjectURL(objectUrl)
-                                        } // Revoke after loading
-                                    />
-                                );
-                            })}
-                        </div> */}
           </div>
         )}
+
         <div className='w-[40%] p-5 text-sm overflow-auto'>
           <div className='mb-5'>
             <div
@@ -113,9 +65,6 @@ function PostPreview({ images, formData, activeInput }) {
             >
               {link ? <p>{` ${link}`}</p> : <p>Link</p>}
             </div>
-            {/* <p className="text-[#888888] text-xs mb-5">
-                            Listed a few seconds ago in Lagos
-                        </p> */}
             <div
               className={`${
                 activeInput === 'description'
@@ -136,13 +85,9 @@ function PostPreview({ images, formData, activeInput }) {
           <div className='mt-5'>
             <div className='flex justify-between items-center'>
               <span className='font-semibold'>Post-er information</span>
-              {/* <span className='text-[#720D96] transition ease-in-out  duration-500'>
-                Seller details
-              </span> */}
             </div>
             <div className='flex items-center gap-3 mt-5'>
               <img
-                // src={userData.profilePicture}
                 src={image}
                 alt=''
                 className='rounded-full w-12 hover:opacity-90 cursor-pointer'
