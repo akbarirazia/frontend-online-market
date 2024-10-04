@@ -78,12 +78,12 @@ function ListingInfo({ listingId }) {
         <div className='flex gap-4 justify-center mt-6'>
           {isAuthenticated && (
             <>
-              <Button
+              {/* <Button
                 className='border border-[#720D96] px-6 py-2 rounded-md bg-white hover:bg-[#720D96] hover:text-white'
                 onClick={handleMessageToggle}
               >
                 Message <TiMessages className='inline-block ml-2' size={20} />
-              </Button>
+              </Button> */}
               <div>
                 <Button
                   className='border border-[#720D96] px-6 py-2 rounded-md bg-white hover:bg-[#720D96] hover:text-white'

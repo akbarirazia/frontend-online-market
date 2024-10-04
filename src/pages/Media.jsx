@@ -4,11 +4,12 @@ import NavContainer from '../components/navBar/NavContainer';
 import PageLayout from '../components/shared/Layouts/PageLayout';
 import ListingsGrid from '../components/listings/ListingsGrid';
 import MediaGrid from '../components/media/MediaGrid';
+import OpportunityGrid from '../components/media/MediaGrid';
 
 function Media() {
   return (
     <PageLayout pageName={'media'}>
-      <MediaGrid />
+      <OpportunityGrid />
     </PageLayout>
   );
 }
