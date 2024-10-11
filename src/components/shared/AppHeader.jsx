@@ -44,14 +44,18 @@ function AppHeader() {
         />
         <div className='hidden lg:flex items-center gap-10'>
           <div
-            className='hidden lg:flex items-center gap-1 cursor-pointer'
-            onClick={handleLocationToggle}
+            className='hidden lg:flex items-center gap-1 '
+            // onClick={handleLocationToggle}
           >
-            <MdLocationPin size={20} />
-            <span className='hover:underline text-[#720D96]'>
-              {isAuthenticated && 'Kabul, Afghanistan  '} |
-              {isAuthenticated && ' ' + userData.name}
-            </span>
+            {isAuthenticated && (
+              <>
+                <span className=' text-[#720D96]'>
+                  {userData.name} |{' '}
+                  <MdLocationPin size={20} className='inline' />{' '}
+                  {userData.location}
+                </span>
+              </>
+            )}
           </div>
           <div className='hidden lg:flex items-center gap-3'>
             <div className='relative'>

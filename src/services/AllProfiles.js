@@ -35,9 +35,11 @@ export const getSingleProfile = async (id) => {
 export const updateProfile = async (id, updatedData) => {
   try {
     const userData = JSON.parse(sessionStorage.getItem('user_data'));
+    console.log(userData.user.id);
+
     console.log(updatedData);
     const response = await axios.patch(
-      `${API_BASE_URL}/profile/${id}`,
+      `${API_BASE_URL}/profile/${userData.user.id}`,
       updatedData,
       {
         headers: {

@@ -92,7 +92,7 @@ function ListingGallery({ listingId }) {
                 src={project.image_url}
                 className='rounded-3xl w-full h-full cursor-pointer transition ease-in-out hover:opacity-90 duration-500 2xl:w-3/4 mx-auto'
                 alt={project.title}
-                onMouseEnter={() => handleSelection(project)}
+                onCLick={() => handleSelection(project)}
                 wrapperProps={{
                   style: { transitionDelay: '1s' },
                 }}

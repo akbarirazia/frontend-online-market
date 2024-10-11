@@ -7,6 +7,7 @@ import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import profile from '../../assets/profile.png';
 
 import ImageLoader from '../reusable/ImageLoader';
 import { ModalContext } from '../../context/ModalContext';
@@ -25,19 +26,7 @@ function ListingSingle({
   const [liked, setLiked] = React.useState(false);
   const [likedPosts, setLikedPosts] = React.useState([]);
   const { handleDeleteListingsToggle } = React.useContext(ModalContext);
-
-  function handleLike(e) {
-    console.log(e.target.id, 'event');
-    const listingId = e.target.id;
-    e.stopPropagation();
-    if (!likedPosts.includes(listingId)) {
-      setLikedPosts((prevState) => {
-        return [...prevState, listingId];
-      });
-    }
-    setLiked(true);
-    console.log(likedPosts, 'liked posts');
-  }
+  console.log(img);
 
   function deleteListing() {
     handleDeleteListingsToggle();
@@ -52,9 +41,31 @@ function ListingSingle({
         onClick={() => window.scrollTo(0, 0)}
       >
         {/* Image Section */}
+        {/* {img ? (
+          <LazyLoadImage
+            src={img} // Render `img` if it's provided and valid
+            alt='Listing Image'
+            effect='blur'
+            className='w-full lg:rounded-md aspect-[4/4] object-cover'
+            wrapperProps={{
+              style: { transitionDelay: '1s' },
+            }}
+          />
+        ) : (
+          <LazyLoadImage
+            src={profile} // Render `profile` if `img` is not provided or invalid
+            alt='Profile Image'
+            effect='blur'
+            className='w-full lg:rounded-md aspect-[4/4] object-cover'
+            wrapperProps={{
+              style: { transitionDelay: '1s' },
+            }}
+          />
+        )} */}
+
         <LazyLoadImage
-          src={img}
-          alt='Listing Image'
+          src={img && img.trim() !== '' ? img : profile} // Better validation for img
+          alt={img && img.trim() !== '' ? 'Listing Image' : 'Profile Image'}
           effect='blur'
           className='w-full lg:rounded-md aspect-[4/4] object-cover'
           wrapperProps={{
@@ -67,7 +78,7 @@ function ListingSingle({
           <div className='text-sm lg:text-base'>
             <p className='font-medium text-lg'>{title}</p>
             <h1 className='font-semibold text-xl text-[#720D96]'>{headline}</h1>
-            <p>Kabul, Afghanistan</p>
+            <p>{location}</p>
 
             {/* Status Section: Rate or Bio */}
             <div className='mt-2'>

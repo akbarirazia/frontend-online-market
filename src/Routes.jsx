@@ -22,6 +22,7 @@ const SearchPage = lazy(() => import('./pages/SearchPage'));
 const Home = lazy(() => import('./pages/Home'));
 const UserListings = lazy(() => import('./pages/UserListings'));
 const ListingsBought = lazy(() => import('./pages/ListingsBought'));
+const ServiceRequest = lazy(() => import('./pages/ServiceRequest'));
 const Favorites = lazy(() => import('./pages/Favorites'));
 const ChangePassword = lazy(() => import('./pages/authPages/ChangePassword'));
 
@@ -44,13 +45,15 @@ export function PageRoutes() {
           <Route exact path='/forgotpassword' element={<ForgotPassword />} />
           <Route exact path='/listings' element={<Listings />} />
           <Route exact path='/changepassword' element={<ChangePassword />} />
+          <Route exact path='/support' element={<SupportLayout />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
             <Route exact path='/create' element={<CreateListing />} />
-            <Route exact path='/support' element={<SupportLayout />} />
+
             <Route path='/edit/:projectId' element={<Edit />} />
             <Route exact path='/listing/op' element={<Media />} />
+            <Route exact path='/requests' element={<ServiceRequest />} />
           </Route>
           {/* <Route element={<ProtectedRoutes />}>
                     <Route exact path="/signup" element={<SignUp />} />

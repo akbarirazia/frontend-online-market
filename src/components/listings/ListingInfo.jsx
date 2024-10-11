@@ -2,21 +2,20 @@ import React, { useContext, useEffect, useState } from 'react';
 import Button from '../reusable/Button';
 import { FaHeart } from 'react-icons/fa';
 import { IoIosShareAlt } from 'react-icons/io';
-import { TiMessages } from 'react-icons/ti';
 import { AuthContext } from '../../context/AuthContext';
-import { ModalContext } from '../../context/ModalContext';
-import imagePlaceholder from '../../assets/image1.png'; // Placeholder if image is unavailable
+import imagePlaceholder from '../../assets/app-icon.png'; // Placeholder if image is unavailable
 import { getSingleProfile } from '../../services/AllProfiles';
 import RequestServiceModal from '../modals/RequestService';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Ensure toast styles are imported
 
 function ListingInfo({ listingId }) {
   const { isAuthenticated } = useContext(AuthContext);
-  const { handleMessageToggle, handleSellerToggle } = useContext(ModalContext);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showFullBio, setShowFullBio] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false); // New state for "like" functionality
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -25,14 +24,25 @@ function ListingInfo({ listingId }) {
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
-  console.log(listingId);
+
+  // Handle like button
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    toast.success(isLiked ? 'Like removed!' : 'Profile liked!');
+  };
+
+  // Handle share button
+  const handleShare = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    toast.success('URL copied to clipboard!');
+  };
 
   useEffect(() => {
     const loadUser = async () => {
       try {
         const data = await getSingleProfile(listingId);
         setUser(data);
-        console.log(data);
       } catch (error) {
         console.error('Failed to load user profile:', error);
       } finally {
@@ -51,9 +61,9 @@ function ListingInfo({ listingId }) {
   }
 
   return (
-    <div className='flex flex-col md:flex-row md:py-8'>
+    <div className='flex flex-col sm:w-[30%] w-full md:py-1'>
       {/* User Profile Section */}
-      <div className=' p-5'>
+      <div className=' p-3'>
         <div className='flex flex-col items-center'>
           <img
             src={user.profilePicture || imagePlaceholder}
@@ -77,35 +87,21 @@ function ListingInfo({ listingId }) {
         </div>
         <div className='flex gap-4 justify-center mt-6'>
           {isAuthenticated && (
-            <>
-              {/* <Button
-                className='border border-[#720D96] px-6 py-2 rounded-md bg-white hover:bg-[#720D96] hover:text-white'
-                onClick={handleMessageToggle}
-              >
-                Message <TiMessages className='inline-block ml-2' size={20} />
-              </Button> */}
-              <div>
-                <Button
-                  className='border border-[#720D96] px-6 py-2 rounded-md bg-white hover:bg-[#720D96] hover:text-white'
-                  onClick={handleModalOpen}
-                >
-                  Request Service
-                </Button>
-
-                {isModalOpen && (
-                  <RequestServiceModal
-                    onClose={handleModalClose}
-                    id={listingId}
-                  />
-                )}
-              </div>
-            </>
+            <Button
+              className='border border-[#720D96] px-6 py-2 rounded-md bg-white hover:bg-[#720D96] hover:text-white'
+              onClick={handleModalOpen}
+            >
+              Request Service
+            </Button>
+          )}
+          {isModalOpen && (
+            <RequestServiceModal onClose={handleModalClose} id={listingId} />
           )}
         </div>
       </div>
 
       {/* User Bio and Actions */}
-      <div className='md:w-2/3 p-5'>
+      <div className=' p-5 m '>
         <div className='mb-5'>
           <h3 className='text-xl font-semibold'>Bio</h3>
           {user.bio ? (
@@ -127,22 +123,30 @@ function ListingInfo({ listingId }) {
           )}
           <h3 className='text-xl font-semibold'> User Email Address:</h3>
           {user.email ? (
-            <>
-              <p className='text-md mt-2'>
-                <span className='text-[#720D96] cursor-pointer '>
-                  {user.email}
-                </span>
-              </p>
-            </>
+            <p className='text-md mt-2'>
+              <span className='text-[#720D96] cursor-pointer '>
+                {user.email}
+              </span>
+            </p>
           ) : (
-            <p className='text-gray-500'>No bio available</p>
+            <p className='text-gray-500'>No email available</p>
           )}
         </div>
-        <div className='flex gap-4'>
-          <Button className='bg-white border border-[#720D96] p-4 rounded-full hover:bg-[#720D96] hover:text-white'>
+        <div className='flex gap-4 justify-center '>
+          {/* Like Button */}
+          <Button
+            className={` border border-[#720D96] p-4 rounded-full hover:bg-[#720D96] hover:text-white ${
+              isLiked ? 'bg-[#720D96] text-white' : ''
+            }`}
+            onClick={handleLike}
+          >
             <FaHeart size={20} />
           </Button>
-          <Button className='bg-white border border-[#720D96] p-4 rounded-full hover:bg-[#720D96] hover:text-white'>
+          {/* Share Button */}
+          <Button
+            className='bg-white border border-[#720D96] p-4 rounded-full hover:bg-[#720D96] hover:text-white'
+            onClick={handleShare}
+          >
             <IoIosShareAlt size={20} />
           </Button>
         </div>

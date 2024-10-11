@@ -1,9 +1,11 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import { updateProfile } from '../../services/AllProfiles'; // Adjust the import path as needed
 import { FaCamera } from 'react-icons/fa';
 import FormInput from '../FormInput';
 import { AuthContext } from '../../context/AuthContext';
+import axios from 'axios'; // Assuming axios is used for API calls
+import { showServices } from '../../services/RequestService';
 
 function UserForm({ formData, handleChange, saveChanges }) {
   const [imagePreview, setImagePreview] = useState(null); // For previewing the image
@@ -19,35 +21,6 @@ function UserForm({ formData, handleChange, saveChanges }) {
     }
   };
 
-  // const handleSave = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     // Prepare FormData to send
-  //     const updatedData = new FormData();
-
-  //     // Append form fields to FormData
-  //     updatedData.append('name', formData.name);
-  //     updatedData.append('headline', formData.headline);
-  //     updatedData.append('bio', formData.bio);
-  //     updatedData.append('rate', formData.rate);
-
-  //     // Append file if available
-  //     if (formData.profilePicture instanceof File) {
-  //       updatedData.append('profilePicture', formData.profilePicture);
-  //     }
-  //     console.log(updatedData);
-
-  //     // Call the updateProfile function with the updatedData
-  //     await updateProfile(formData.id, updatedData); // Assuming updateProfile accepts FormData directly
-  //     toast.success('Profile updated successfully');
-  //     saveChanges();
-  //   } catch (error) {
-  //     toast.error('Failed to update profile');
-  //     console.error('Error updating profile:', error);
-  //   }
-  // };
-
   const handleSave = async (e) => {
     e.preventDefault();
 
@@ -60,13 +33,20 @@ function UserForm({ formData, handleChange, saveChanges }) {
       updatedData.append('headline', formData.headline);
       updatedData.append('bio', formData.bio);
       updatedData.append('rate', formData.rate);
-      console.log('sending', formData.rate);
 
       if (formData.profilePicture instanceof File) {
         updatedData.append('profilePicture', formData.profilePicture);
       }
 
+      // Append selected service IDs
+      // // updatedData.append('serviceIds', JSON.stringify(selectedServices));
+      // const data = {
+      //   userId: formData.id,
+      //   serviceIds: selectedServices,
+      // };
+
       await updateProfile(formData.id, updatedData);
+      // await assignService(data);
       toast.success('Profile updated successfully');
       saveChanges();
     } catch (error) {
@@ -85,7 +65,6 @@ function UserForm({ formData, handleChange, saveChanges }) {
             className='absolute bottom-0 left-3 w-40 border-4 border-white rounded-full'
           />
         ) : formData.profilePicture ? (
-          // Use the URL directly if it exists
           <img
             src={
               typeof formData.profilePicture === 'string'
@@ -131,6 +110,8 @@ function UserForm({ formData, handleChange, saveChanges }) {
           labelClasses='text-base'
           className='sm:w-[40%] p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-[#720D96] hover:border-[#720D96] mt-2 mb-5'
         />
+        {/* Service selection */}
+
         <FormInput
           inputLabel='Headline'
           labelFor='headline'
@@ -165,7 +146,7 @@ function UserForm({ formData, handleChange, saveChanges }) {
             rows={5}
             onChange={handleChange}
             className='border border-[#D0D5DD] shadow-sm w-full rounded-md resize-none p-2 focus:outline-[#720D96] hover:border-[#720D96] mt-2'
-            // value={formData.bio}
+            value={formData.bio}
             placeholder='Write a summary about yourself'
           ></textarea>
         </div>

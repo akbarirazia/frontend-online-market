@@ -11,6 +11,7 @@ function NavContainer({ className, pageName }) {
         {pageName === 'Home' ||
         pageName === 'Listings' ||
         pageName === 'media' ||
+        pageName === 'requests' ||
         pageName === 'support' ? (
           <NavContent />
         ) : (

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaShop } from 'react-icons/fa6';
 import { MdLocationPin } from 'react-icons/md';
@@ -58,10 +58,17 @@ function NavContent() {
     });
   }
 
-  function handleSelection(e) {
-    const category = e.target.id || e.target.parentNode.id;
-    showCategory(category);
-  }
+  // function handleSelection(e) {
+  //   const category = e.target.id || e.target.parentNode.id;
+  //   showCategory(category);
+  // }
+  const handleSelection = useCallback(
+    (e) => {
+      const category = e.target.id || e.target.parentNode.id;
+      showCategory(category);
+    },
+    [showCategory]
+  );
 
   function handleOpenNotifications() {
     handleNotificationToggle();
@@ -107,6 +114,7 @@ function NavContent() {
               <span>Opportunities</span>
             </div>
           </Link>
+
           {isAuthenticated && (
             <>
               <div
@@ -123,24 +131,38 @@ function NavContent() {
                 </div>
                 <span>Notifications</span>
               </div>
-              <Link to='/support'>
+              <Link to='/requests'>
                 <div
                   onClick={handleSelection}
-                  id='support'
+                  id='Requests' // Updated the ID to match the link
                   className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
-                    isActiveRoute('/support')
+                    isActiveRoute('/requests') // Check against the correct path
                       ? 'bg-[#e8d7ee] text-[#720d96]'
                       : ''
                   }`}
                 >
                   <div className='rounded-full p-2'>
-                    <MdSupportAgent size={24} />
+                    <MdMediation size={24} />
                   </div>
-                  <span>Support</span>
+                  <span> Service Requests</span>
                 </div>
               </Link>
             </>
           )}
+          <Link to='/support'>
+            <div
+              onClick={handleSelection}
+              id='support'
+              className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
+                isActiveRoute('/support') ? 'bg-[#e8d7ee] text-[#720d96]' : ''
+              }`}
+            >
+              <div className='rounded-full p-2'>
+                <MdSupportAgent size={24} />
+              </div>
+              <span>Support</span>
+            </div>
+          </Link>
           <hr className='my-3' />
 
           {isAuthenticated && (

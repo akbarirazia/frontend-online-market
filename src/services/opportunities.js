@@ -30,14 +30,14 @@ const fetchOpportunities = async () => {
 };
 
 // Apply for opportunity function
-const applyForOpportunity = async ({ userId, opportunityId, coverLetter }) => {
+const applyForOpportunity = async ({ userId, opportunityId, coverletter }) => {
   try {
     const response = await axios.post(
       `${API_BASE_URL}/applications/opportunities/${opportunityId}/apply`,
       {
         userId,
         opportunityId,
-        coverLetter,
+        coverletter,
       },
       {
         headers: {
@@ -53,6 +53,19 @@ const applyForOpportunity = async ({ userId, opportunityId, coverLetter }) => {
   }
 };
 
-const postOpportunity = async () => {};
+const postOpportunity = async (data) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/opportunities`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error posting opportunity:', error);
+    throw error; // Rethrow to handle upstream
+  }
+};
 
 export { fetchOpportunities, applyForOpportunity, postOpportunity };

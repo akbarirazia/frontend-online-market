@@ -16,9 +16,11 @@ function SingleListing() {
       <SingleListingProvider>
         {/* Step 2: Pass the id as a prop to any child component */}
         <ListingHeader listingId={id} />
-        <div className='flex w-full flex-col md:flex-row md:py-8'>
-          <ListingGallery listingId={id} />
-          <ListingInfo listingId={id} />
+        <div className='flex w-full justify-center flex-col md:flex-row md:py-8'>
+          <ListingInfo listingId={id} className='order-1 md:order-1' />{' '}
+          {/* Render first in mobile view */}
+          <ListingGallery listingId={id} className='order-2 md:order-2' />{' '}
+          {/* Render second in mobile view */}
         </div>
       </SingleListingProvider>
     </Container>

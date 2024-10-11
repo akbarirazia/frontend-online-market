@@ -8,6 +8,7 @@ import {
 import { AuthContext } from '../../context/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
 import Modal from '../../components/modals/Modal';
+import { Link } from 'react-router-dom';
 
 function OpportunityGrid() {
   const [opportunities, setOpportunities] = useState([]);
@@ -20,7 +21,7 @@ function OpportunityGrid() {
   const { userData } = useContext(AuthContext);
 
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
-  const [coverLetter, setCoverLetter] = useState('');
+  const [coverletter, setCoverletter] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
@@ -56,14 +57,23 @@ function OpportunityGrid() {
   };
 
   // Handle submitting new opportunity
+  // Handle submitting new opportunity
   const handleSubmitOpportunity = async (e) => {
     e.preventDefault();
     try {
-      await postOpportunity(newOpportunity);
+      const response = await postOpportunity(newOpportunity);
       toast.success('Opportunity posted successfully!');
       setIsModalOpen(false); // Close modal after successful submission
+
+      // Re-fetch opportunities after posting the new one
+      const updatedOpportunities = await fetchOpportunities();
+      setOpportunities(updatedOpportunities); // Update the state with new opportunities
     } catch (error) {
-      toast.error('Error posting opportunity.');
+      const errorMessage =
+        error?.response?.data?.msg ||
+        error.message ||
+        'Something went wrong, please try again!';
+      toast.error(errorMessage);
     }
   };
 
@@ -75,11 +85,11 @@ function OpportunityGrid() {
       const data = {
         userId: userData.id,
         opportunityId: selectedOpportunity.id,
-        coverLetter,
+        coverletter: coverletter,
       };
       await applyForOpportunity(data);
       setIsApplyModalOpen(false); // Close the apply modal
-      setCoverLetter(''); // Clear the cover letter
+      setCoverletter(''); // Clear the cover letter
       toast.success('Application submitted successfully!');
     } catch (error) {
       toast.error('Something went wrong while applying.');
@@ -91,10 +101,23 @@ function OpportunityGrid() {
     <div className='min-h-screen bg-gray-100 py-10 px-5'>
       <div className='container mx-auto'>
         <div className='flex justify-between items-center mb-4'>
-          <h1 className='text-2xl font-bold'>Opportunities</h1>
+          <h2 className='text-2xl font-semibold mb-4'>
+            Available Opportunities
+          </h2>
           <button
-            className='bg-[#720D96] text-white px-4 py-2 rounded hover:bg-purple-950 transition'
+            className={`bg-[#720D96] text-white px-4 py-2 rounded transition 
+              ${
+                userData?.role === 'businessOwner'
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'hover:bg-purple-950'
+              }`}
             onClick={handleOpenModal}
+            disabled={userData?.role === 'businessOwner'}
+            title={
+              userData?.role === 'businessOwner'
+                ? 'Only service seekers can post an opportunity'
+                : ''
+            }
           >
             Post an Opportunity
           </button>
@@ -160,7 +183,6 @@ function OpportunityGrid() {
           </form>
         </Modal>
 
-        <h2 className='text-2xl font-semibold mb-4'>Available Opportunities</h2>
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
           {opportunities.map((opportunity) => (
             <div
@@ -175,8 +197,14 @@ function OpportunityGrid() {
                   Location: {opportunity.location}
                 </p>
                 <p className='text-gray-600'>
-                  Posted by: {opportunity.serviceSeeker.name} -{' '}
-                  {opportunity.serviceSeeker.headline}
+                  Posted by:{' '}
+                  <Link
+                    to={`/listing/${opportunity.serviceSeeker.id}`}
+                    className='text-[#c341f3]'
+                  >
+                    {opportunity.serviceSeeker.name} -{' '}
+                    {opportunity.serviceSeeker.headline}
+                  </Link>
                 </p>
                 <Button
                   onClick={() => handleOpenApplyModal(opportunity)}
@@ -200,8 +228,8 @@ function OpportunityGrid() {
             </p>
             <textarea
               placeholder='Cover Letter'
-              value={coverLetter}
-              onChange={(e) => setCoverLetter(e.target.value)}
+              value={coverletter}
+              onChange={(e) => setCoverletter(e.target.value)}
               className='border p-2 w-full mb-4'
             />
             <div className='flex justify-end'>
