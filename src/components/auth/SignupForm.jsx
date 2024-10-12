@@ -95,20 +95,20 @@ function SignupForm() {
         />
 
         {/* Conditionally render the headline input based on the role */}
-        {role === 'businessOwner' && (
-          <FormInput
-            inputLabel='Headline'
-            labelFor='headline'
-            inputType='text'
-            inputId='headline'
-            inputName='headline'
-            placeholderText='Enter your headline'
-            ariaLabelName='Headline'
-            inputValue={headline}
-            onChange={(e) => setHeadline(e.target.value)}
-            className='w-full p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-none focus:shadow mb-5'
-          />
-        )}
+        {/* {role === 'businessOwner' && ( */}
+        <FormInput
+          inputLabel='Headline'
+          labelFor='headline'
+          inputType='text'
+          inputId='headline'
+          inputName='headline'
+          placeholderText='Enter your headline'
+          ariaLabelName='Headline'
+          inputValue={headline}
+          onChange={(e) => setHeadline(e.target.value)}
+          className='w-full p-4 border border-[#D0D5DD] bg-white rounded-md shadow-sm text-sm focus:outline-none focus:shadow mb-5'
+        />
+        {/* )} */}
 
         <FormInput
           inputLabel='Email Address'
