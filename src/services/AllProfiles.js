@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // Base URL of your API
-const API_BASE_URL = 'http://localhost:5000/api'; // Adjust this URL to your actual API base URL
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Adjust this URL to your actual API base URL
 
 // Function to get all user profiles
 const userData = JSON.parse(sessionStorage.getItem('user_data'));

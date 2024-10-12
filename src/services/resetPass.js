@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api'; // Replace with your backend API URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Replace with your backend API URL
 
 export const resetPass = {
   sendOtp: async (email) => {

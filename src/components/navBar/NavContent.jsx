@@ -8,6 +8,7 @@ import { IoNotifications } from 'react-icons/io5';
 import { Icons } from '../../data/listings'; // Adjust the import path
 import { MdSupportAgent } from 'react-icons/md';
 import Appicon from '../../assets/app-icon.png';
+import { FaHandsHelping } from 'react-icons/fa';
 
 import Button from '../reusable/Button';
 import profile from '../../assets/profile.svg';
@@ -117,6 +118,22 @@ function NavContent() {
 
           {isAuthenticated && (
             <>
+              <Link to='/requests'>
+                <div
+                  onClick={handleSelection}
+                  id='Requests' // Updated the ID to match the link
+                  className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
+                    isActiveRoute('/requests') // Check against the correct path
+                      ? 'bg-[#e8d7ee] text-[#720d96]'
+                      : ''
+                  }`}
+                >
+                  <div className='rounded-full p-2'>
+                    <FaHandsHelping size={24} />
+                  </div>
+                  <span> Service Requests</span>
+                </div>
+              </Link>
               <div
                 onClick={handleOpenNotifications}
                 className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md relative`}
@@ -131,22 +148,6 @@ function NavContent() {
                 </div>
                 <span>Notifications</span>
               </div>
-              <Link to='/requests'>
-                <div
-                  onClick={handleSelection}
-                  id='Requests' // Updated the ID to match the link
-                  className={`flex items-center gap-2 mb-2 p-1 text-sm cursor-pointer transition ease-in-out hover:bg-[#e4e6eb] rounded-md ${
-                    isActiveRoute('/requests') // Check against the correct path
-                      ? 'bg-[#e8d7ee] text-[#720d96]'
-                      : ''
-                  }`}
-                >
-                  <div className='rounded-full p-2'>
-                    <MdMediation size={24} />
-                  </div>
-                  <span> Service Requests</span>
-                </div>
-              </Link>
             </>
           )}
           <Link to='/support'>

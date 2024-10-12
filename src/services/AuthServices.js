@@ -1,17 +1,22 @@
 import axios from 'axios';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 class UserAuthentication {
   constructor() {
-    this.baseUrl = 'http://localhost:5000/api/auth';
+    this.baseUrl = import.meta.env.VITE_API_BASE_URL;
   }
 
   async registerUser(userData) {
     try {
-      const response = await axios.post(`${this.baseUrl}/register`, userData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        `${this.baseUrl}/auth/register`,
+        userData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error(error);
@@ -21,11 +26,15 @@ class UserAuthentication {
 
   async authenticateUser(userDetail) {
     try {
-      const response = await axios.post(`${this.baseUrl}/login`, userDetail, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        `${this.baseUrl}/auth/login`,
+        userDetail,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error(error);

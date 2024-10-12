@@ -10,7 +10,7 @@ const getToken = () => {
   return null; // Return null if no user_data found
 };
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Fetch opportunities function
 const fetchOpportunities = async () => {

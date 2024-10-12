@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Fetch listings filtered by search query (name or headline)
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const fetchUsersByQuery = async (searchTerm) => {
   try {
     const response = await axios.get(

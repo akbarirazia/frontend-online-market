@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import image from '../assets/image1.png';
+
 import { AuthContext } from '../context/AuthContext';
 
 function PostPreview({ images, formData, activeInput }) {
@@ -88,7 +88,7 @@ function PostPreview({ images, formData, activeInput }) {
             </div>
             <div className='flex items-center gap-3 mt-5'>
               <img
-                src={image}
+                src={userData.profilePicture}
                 alt=''
                 className='rounded-full w-12 hover:opacity-90 cursor-pointer'
               />

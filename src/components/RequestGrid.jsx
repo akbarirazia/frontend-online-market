@@ -15,29 +15,25 @@ function RequestGrid() {
   const { userData } = useContext(AuthContext);
 
   useEffect(() => {
-    const getServiceRequests = async () => {
+    const fetchRequests = async () => {
       try {
-        const requests = await fetchServiceRequests(userData.id);
-        setIncomingRequests(requests); // Incoming requests for this user
+        // Fetch service requests and my requests in parallel
+        const [serviceRequests, myRequests] = await Promise.all([
+          fetchServiceRequests(userData.id),
+          fetchMyRequests(userData.id),
+        ]);
+
+        setIncomingRequests(serviceRequests);
+        setOutgoingRequests(myRequests);
       } catch (error) {
-        setError('Failed to load service requests.');
+        setError('Failed to load requests.', error);
+      } finally {
+        setLoading(false); // Ensure loading is false after both requests are completed
       }
     };
 
-    const getMyRequests = async () => {
-      try {
-        const requests = await fetchMyRequests(userData.id);
-        setOutgoingRequests(requests); // Outgoing requests made by this user
-      } catch (error) {
-        setError('Failed to load my requests.');
-      }
-    };
-
-    getServiceRequests();
-    getMyRequests().finally(() => {
-      setLoading(false); // Set loading to false once both requests are completed
-    });
-  }, []);
+    fetchRequests();
+  }, [userData.id]);
 
   // Function to handle status change (accept, reject, complete)
   // Adjust the import path as necessary

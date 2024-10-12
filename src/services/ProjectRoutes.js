@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/projects'; // Replace with your actual API URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Replace with your actual API URL
 
 export const ProjectService = {
   // Function to get all projects for a specific user
   getProjects: async (userId) => {
     try {
-      const response = await axios.get(`${API_URL}/users/${userId}`);
+      const response = await axios.get(
+        `${API_BASE_URL}/projects/users/${userId}`
+      );
       return response.data; // Return the projects data
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -17,7 +19,10 @@ export const ProjectService = {
   // Function to post a new project
   createProject: async (projectData) => {
     try {
-      const response = await axios.post(API_URL, projectData);
+      const response = await axios.post(
+        API_BASE_URL + '/projects',
+        projectData
+      );
       return response.data; // Return the newly created project
     } catch (error) {
       console.error('Error creating project:', error);
@@ -29,7 +34,7 @@ export const ProjectService = {
   updateProject: async (projectId, projectData) => {
     try {
       const response = await axios.patch(
-        `${API_URL}/${projectId}`,
+        `${API_BASE_URL}/projects/${projectId}`,
         projectData
       );
       return response.data; // Return the updated project
@@ -40,7 +45,9 @@ export const ProjectService = {
   },
   deleteProject: async (projectId) => {
     try {
-      const response = await axios.delete(`${API_URL}/${projectId}`);
+      const response = await axios.delete(
+        `${API_BASE_URL}/projects/${projectId}`
+      );
       return response.message; // Return the deleted project ID or message (if successful)
     } catch (error) {
       console.error('Error deleting project:', error);

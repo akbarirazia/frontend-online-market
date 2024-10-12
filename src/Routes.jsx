@@ -45,11 +45,11 @@ export function PageRoutes() {
           <Route exact path='/forgotpassword' element={<ForgotPassword />} />
           <Route exact path='/listings' element={<Listings />} />
           <Route exact path='/changepassword' element={<ChangePassword />} />
-          <Route exact path='/support' element={<SupportLayout />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
             <Route exact path='/create' element={<CreateListing />} />
+            <Route exact path='/support' element={<SupportLayout />} />
 
             <Route path='/edit/:projectId' element={<Edit />} />
             <Route exact path='/listing/op' element={<Media />} />
