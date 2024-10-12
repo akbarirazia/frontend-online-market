@@ -157,7 +157,7 @@ function UserProfile() {
       {!isEditRequested && (
         <div className='bg-white  mx-auto'>
           <div className='relative'>
-            <div className='relative h-64 w-full bg-center bg-cover bg-black'>
+            <div className='relative h-64 w-full bg-gradient-to-r from-[#e194ff] to-[#5096ff]'>
               <img
                 src={userData.profilePicture}
                 alt=''
