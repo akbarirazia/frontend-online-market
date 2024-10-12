@@ -10,7 +10,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Ensure toast styles are imported
 
 function ListingInfo({ listingId }) {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, userData } = useContext(AuthContext);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showFullBio, setShowFullBio] = useState(false);
@@ -88,8 +88,16 @@ function ListingInfo({ listingId }) {
         <div className='flex gap-4 justify-center mt-6'>
           {isAuthenticated && (
             <Button
-              className='border border-[#720D96] px-6 py-2 rounded-md bg-white hover:bg-[#720D96] hover:text-white'
-              onClick={handleModalOpen}
+              className={`border border-[#720D96] px-6 py-2 rounded-md bg-white hover:bg-[#720D96] hover:text-white ${
+                user.id === userData.id ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              onClick={() => {
+                if (user.id === userData.id) {
+                  return; // Prevent the modal from opening if IDs match
+                }
+                handleModalOpen(); // Open the modal only if IDs do not match
+              }}
+              disabled={user.id === userData.id} // Disable if IDs match
             >
               Request Service
             </Button>

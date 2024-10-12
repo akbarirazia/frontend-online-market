@@ -6,6 +6,7 @@ import {
   fetchServiceRequests,
 } from '../services/RequestService'; // Adjust the import path as necessary
 import { AuthContext } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 function RequestGrid() {
   const [incomingRequests, setIncomingRequests] = useState([]);
@@ -105,7 +106,13 @@ function RequestGrid() {
               </h3>
               <p className='text-gray-700 mb-2'>{request.message}</p>
               <p className='text-gray-500'>
-                Requester: {request.requester.name}
+                Requester:{' '}
+                <Link
+                  to={`/listing/${request.requester.id}`}
+                  className='text-fuchsia-800'
+                >
+                  {request.requester.name}
+                </Link>
               </p>
               <p className='text-gray-500 mb-2'>
                 Created At: {new Date(request.createdAt).toLocaleString()}
