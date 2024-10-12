@@ -217,8 +217,8 @@ function NavContent() {
       {/* Mobile screen */}
       <div className='lg:hidden'>
         <div className='flex items-center justify-between text-[13px] sm:text-sm my-2'>
-          <div className='flex items-center gap-2 font-medium'>
-            <Link to={'/selling'}>
+          <div className='flex flex-wrap items-center gap-2 font-medium'>
+            <Link to={'/projects'}>
               <img
                 src={profile}
                 alt=''
@@ -231,6 +231,16 @@ function NavContent() {
             >
               Categories
             </p>
+            <Link to={'/listing/op'}>
+              <p className='p-2 sm:py-2 sm:px-3 rounded-3xl bg-[#e4e6eb] relative'>
+                Opportunities
+              </p>
+            </Link>
+            <Link to={'/requests'}>
+              <p className='p-2 sm:py-2 sm:px-3 rounded-3xl bg-[#e4e6eb] relative'>
+                Service Requests
+              </p>
+            </Link>
             {isAuthenticated && (
               <p
                 onClick={handleOpenNotifications}
@@ -242,6 +252,11 @@ function NavContent() {
                 )}
               </p>
             )}
+            <Link to={'/support'}>
+              <p className='p-2 sm:py-2 sm:px-3 rounded-3xl bg-[#e4e6eb] relative'>
+                Support
+              </p>
+            </Link>
           </div>
         </div>
         <hr />
@@ -259,13 +274,13 @@ function NavContent() {
               </div>
             </div>
           )} */}
-          <div
+          {/* <div
             className='flex items-center gap-1 cursor-pointer float-right text-[13px] sm:text-sm'
             onClick={handleLocationToggle}
           >
             <MdLocationPin size={15} />
             <span className='hover:underline text-[#720D96]'>Location</span>
-          </div>
+          </div> */}
         </div>
       </div>
       {showCategories && (

@@ -36,14 +36,14 @@ function SellingListings() {
     <section>
       <div className='flex items-center p-3 gap-3 w-full lg:hidden'>
         <div className='w-[90%] mx-auto'>
-          <Link to={'/create'}>
+          {/* <Link to={'/create'}>
             <Button className='p-4 rounded-md w-full bg-[#e8d7ee] text-[#720D96] font-semibold transition ease-in-out hover:text-white hover:bg-[#720D96]'>
               + Create a New Listing
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </div>
-      {listings.length > 0 ? (
+      {/* {listings.length > 0 ? (
         <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 mt-6 gap-2 px-3 w-full'>
           {listings.map((listing) => {
             return (
@@ -64,7 +64,7 @@ function SellingListings() {
         <p className='text-center p-3 border-t-2 md:border-none text-sm md:text-xl font-semibold text-gray-400'>
           Listings that you are selling on marketplace will appear here.
         </p>
-      )}
+      )} */}
       {showDeleteListingsModal && (
         <DeleteListingsModal
           isDeleteInProgress={isDeleteInProgress}
