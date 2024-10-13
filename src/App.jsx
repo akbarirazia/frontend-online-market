@@ -7,6 +7,7 @@ function App() {
     <AuthProvider>
       <div className='selection:bg-[#a480b1] selection:text-white'>
         <PageRoutes />
+        <ToastContainer />
       </div>
     </AuthProvider>
   );
