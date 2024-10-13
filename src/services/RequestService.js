@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Replace with your actual API URL
+const userData = JSON.parse(sessionStorage.getItem('user_data'));
 
 // Function to send a service request
 export const sendServiceRequest = async (
@@ -53,7 +54,7 @@ export const showServicesAndUsers = async () => {
     console.error('Error sending services request:', error);
   }
 };
-const userData = JSON.parse(sessionStorage.getItem('user_data'));
+
 export const fetchServiceRequests = async (userId) => {
   const API_URL = `${API_BASE_URL}/servicerequest/provider/${userId}`;
 
