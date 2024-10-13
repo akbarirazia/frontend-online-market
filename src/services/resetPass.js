@@ -5,7 +5,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Replace with your bac
 export const resetPass = {
   sendOtp: async (email) => {
     try {
-      const response = await axios.post(`${API_URL}/request-otp`, {
+      const response = await axios.post(`${API_BASE_URL}/request-otp`, {
         email, // Email or phone number
       });
       return response.data;
@@ -17,7 +17,7 @@ export const resetPass = {
 
   verifyOtp: async (otp, email) => {
     try {
-      const response = await axios.post(`${API_URL}/verify-otp`, {
+      const response = await axios.post(`${API_BASE_URL}/verify-otp`, {
         otp,
         email,
       });
@@ -31,7 +31,7 @@ export const resetPass = {
   changePassword: async (userId, newPassword, token) => {
     try {
       const response = await axios.post(
-        `${API_URL}/change-password`,
+        `${API_BASE_URL}/change-password`,
         {
           userId,
           newPassword,
