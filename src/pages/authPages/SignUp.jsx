@@ -21,7 +21,7 @@ function SignUp() {
         <div className='hidden md:flex flex-col justify-center flex-1 bg-white rounded-3xl'>
           <script src='https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js'></script>
           <Player
-            src='https://lottie.host/9c30cb49-bcc6-40ff-83b2-c45dba153869/KJnZ3ZELnt.json'
+            src='https://lottie.host/98ac095b-e180-483b-9876-7753457c3e86/by1HaaHjyc.json'
             background='#FFFFFF'
             speed='1'
             style={{ width: '100%', height: '500px' }}

@@ -21,7 +21,7 @@ function SignIn() {
         <div className='hidden md:flex flex-col justify-center flex-1 bg-white'>
           <script src='https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js'></script>
           <Player
-            src='https://lottie.host/444c3d32-dd31-4420-b956-5bbb79bc67d9/5RTMDG1lu3.json'
+            src='https://lottie.host/ed7fa244-3aaf-480c-9020-b72bb9e1740f/lfmPKykFX5.json'
             background='#FFFFFF'
             speed='1'
             style={{ width: '100%', height: '400px' }}
