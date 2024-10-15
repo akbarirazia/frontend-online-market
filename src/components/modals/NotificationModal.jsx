@@ -14,6 +14,7 @@ import ImageLoader from '../reusable/ImageLoader';
 import { AuthContext } from '../../context/AuthContext';
 import { fetchNotifications } from '../../services/GetNotification';
 import { ModalContext } from '../../context/ModalContext';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function NotificationModal({ onClose }) {
   const [mouseEnter, setMouseEnter] = useState(false);
@@ -26,7 +27,7 @@ function NotificationModal({ onClose }) {
     const newReadStatus = !currentReadStatus; // Toggle the read status
 
     try {
-      await axios.patch(`http://localhost:5000/api/notification/${id}`, {
+      await axios.patch(`${API_BASE_URL}api/notification/${id}`, {
         read: newReadStatus,
       });
       // Update the notification read status in the state
