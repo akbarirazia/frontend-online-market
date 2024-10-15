@@ -27,7 +27,7 @@ function NotificationModal({ onClose }) {
     const newReadStatus = !currentReadStatus; // Toggle the read status
 
     try {
-      await axios.patch(`${API_BASE_URL}api/notification/${id}`, {
+      await axios.patch(`${API_BASE_URL}/api/notification/${id}`, {
         read: newReadStatus,
       });
       // Update the notification read status in the state
