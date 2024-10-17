@@ -70,19 +70,20 @@ function RequestServiceModal({ onClose, id }) {
       <ToastContainer autoClose={10000} />
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: 1 }} // Smooth and fast fade-in
+        transition={{ duration: 0.000002 }} // Set duration to make the modal appear quickly
         exit={{ opacity: 0 }}
       >
         {/* Move ToastContainer here to ensure it works globally */}
         {/* Desktop View */}
 
-        <div className='hidden md:block fixed inset-0 z-30'>
+        <div className='hidden md:block fixed inset-0 z-40'>
           <div
-            className='bg-black bg-opacity-50 fixed inset-0 w-full h-full z-20'
+            className='bg-black bg-opacity-50 fixed inset-0 w-full h-full z-40' // Ensure this is layered above the content
             onClick={onClose}
           ></div>
-          <main className='flex items-center justify-center h-full w-full relative'>
-            <div className='modal-wrapper flex items-center z-30 relative xl:w-[50%] justify-center'>
+          <main className='flex items-center justify-center  z-50  h-full w-full relative'>
+            <div className='modal-wrapper flex items-center  z-50  relative xl:w-[50%] justify-center'>
               <div className='max-w-md mx-5 xl:max-w-3xl bg-white max-h-[90vh] shadow-lg rounded-lg relative w-full'>
                 <div className='flex items-center justify-between p-4 border-b'>
                   <h1 className='font-semibold text-2xl text-center flex-1'>

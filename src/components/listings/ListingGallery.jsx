@@ -27,7 +27,7 @@ function ListingGallery({ listingId }) {
   }, [listingId]);
 
   const handleImageClick = (imageUrl) => {
-    setExpandedImage(imageUrl);
+    // setExpandedImage(imageUrl);
   };
 
   const handleClose = () => {
@@ -53,7 +53,7 @@ function ListingGallery({ listingId }) {
     <div className='md:flex-1 2xl:flex-none 2xl:w-2/3'>
       <div className='w-full lg:w-[80%] 2xl:w-full 2xl:flex flex-row-reverse mx-auto py-5 px-2 md:py-0'>
         <div
-          className='mb-5 w-full'
+          className='mb-5 w-full z-0'
           onClick={() => handleImageClick(currentProject?.image_url)}
           id='main-image'
         >
@@ -66,7 +66,7 @@ function ListingGallery({ listingId }) {
                 wrapperProps={{
                   style: { transitionDelay: '1s' },
                 }}
-                className='rounded-3xl w-full max-h-[700px]'
+                className='rounded-3xl w-full max-h-[700px] -z-50'
               />
               <div className='mt-4'>
                 <h2 className='text-xl font-semibold'>

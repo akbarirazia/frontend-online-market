@@ -82,17 +82,27 @@ function OpportunityGrid() {
     if (!selectedOpportunity) return;
 
     try {
+      setIsApplyModalOpen(false); // Close the apply modal
+      setCoverletter('');
+
       const data = {
-        userId: userData.id,
         opportunityId: selectedOpportunity.id,
         coverletter: coverletter,
       };
+
       await applyForOpportunity(data);
       setIsApplyModalOpen(false); // Close the apply modal
       setCoverletter(''); // Clear the cover letter
       toast.success('Application submitted successfully!');
     } catch (error) {
-      toast.error('Something went wrong while applying.');
+      // Improved error handling
+      if (error.response && error.response.data && error.response.data.msg) {
+        // Access the message from the server response
+        toast.error(error.response.data.msg);
+      } else {
+        // Handle unexpected error formats
+        toast.error('An unexpected error occurred. Please try again later.');
+      }
       console.error('Error applying for opportunity:', error);
     }
   };

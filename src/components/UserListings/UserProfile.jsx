@@ -107,11 +107,11 @@ function UserProfile() {
         userId: userData.id,
         serviceIds: selectedServices,
       };
+      setIsServiceEditRequested(false);
       const response = await assignService(data);
       const refetching = await showUserService(userData.id);
       setServices(refetching.providedServices);
 
-      setIsServiceEditRequested(false);
       toast.success(response.message);
     } catch (error) {
       toast.error('Failed to update services');
