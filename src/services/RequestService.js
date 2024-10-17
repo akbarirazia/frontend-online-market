@@ -1,7 +1,14 @@
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Replace with your actual API URL
-const userData = JSON.parse(sessionStorage.getItem('user_data'));
+const getToken = () => {
+  const userData = sessionStorage.getItem('user_data'); // Retrieve the user_data
+  if (userData) {
+    const user = JSON.parse(userData); // Parse the JSON string
+    return user.userToken; // Return the userToken
+  }
+  return null; // Return null if no user_data found
+};
 
 // Function to send a service request
 export const sendServiceRequest = async (
@@ -21,7 +28,7 @@ export const sendServiceRequest = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${userData.userToken}`, // Adjust if you store token differently
+          Authorization: `Bearer ${getToken()}`, // Adjust if you store token differently
         },
       }
     );
@@ -35,7 +42,7 @@ export const sendServiceRequest = async (
 export const showServices = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/services`);
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
     // Returns the server response
   } catch (error) {
@@ -47,7 +54,7 @@ export const showServicesAndUsers = async () => {
     const response = await axios.get(
       `${API_BASE_URL}/services/services-with-users`
     );
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data; // Returns the server response
   } catch (error) {
@@ -61,7 +68,7 @@ export const fetchServiceRequests = async (userId) => {
   try {
     const response = await axios.get(API_URL, {
       headers: {
-        Authorization: `Bearer ${userData.userToken}`, // Adjust if you store token differently
+        Authorization: `Bearer ${getToken()}`, // Adjust if you store token differently
       },
     });
     return response.data;
@@ -76,7 +83,7 @@ export const fetchMyRequests = async (userId) => {
   try {
     const response = await axios.get(API_URL, {
       headers: {
-        Authorization: `Bearer ${userData.userToken}`, // Adjust if you store token differently
+        Authorization: `Bearer ${getToken()}`, // Adjust if you store token differently
       },
     });
     return response.data;
@@ -95,7 +102,7 @@ export const answerRequest = async (requestId, newStatus) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${userData.userToken}`, // Adjust if you store token differently
+          Authorization: `Bearer ${getToken()}`, // Adjust if you store token differently
         },
       }
     );
@@ -122,7 +129,7 @@ export const assignService = async ({ userId, serviceIds }) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${userData.userToken}`, // Adjust if you store token differently
+          Authorization: `Bearer ${getToken()}`, // Adjust if you store token differently
         },
       }
     );
