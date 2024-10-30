@@ -41,7 +41,7 @@ function UserListingsNavBar({ pageName }) {
             </div>
             <span id='userProfile w-5'>User Profile</span>
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to={'/dashboard'}
             id='User dashboard'
             className={({ isActive }) => {
@@ -55,7 +55,7 @@ function UserListingsNavBar({ pageName }) {
               <MdAnalytics size={20} id='Seller dashboard' />
             </div>
             <span id='Seller dashboard'>User dashboard</span>
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to={'/projects'}
             id='projects'
