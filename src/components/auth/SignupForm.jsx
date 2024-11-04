@@ -37,9 +37,9 @@ function SignupForm() {
     const userAuthentication = new UserAuthentication(axios);
 
     try {
-      if (role === 'businessOwner') {
-        formData.headline = headline;
-      }
+      // if (role === 'businessOwner' ) {
+      formData.headline = headline;
+      // }
 
       formData.location = location; // Include the location in formData
 
